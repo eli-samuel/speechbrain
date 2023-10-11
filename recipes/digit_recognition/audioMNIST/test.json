@@ -1,0 +1,1502 @@
+{
+  "8_jackson_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_8.wav",
+    "length": 0.184375,
+    "dgt_id": "8"
+  },
+  "9_yweweler_32": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_yweweler_32.wav",
+    "length": 0.23975,
+    "dgt_id": "9"
+  },
+  "8_jackson_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_38.wav",
+    "length": 0.2249375,
+    "dgt_id": "8"
+  },
+  "1_theo_24": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_theo_24.wav",
+    "length": 0.1345625,
+    "dgt_id": "1"
+  },
+  "3_theo_44": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_44.wav",
+    "length": 0.115375,
+    "dgt_id": "3"
+  },
+  "3_jackson_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_jackson_33.wav",
+    "length": 0.241875,
+    "dgt_id": "3"
+  },
+  "8_nicolas_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_nicolas_4.wav",
+    "length": 0.1291875,
+    "dgt_id": "8"
+  },
+  "1_yweweler_19": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_19.wav",
+    "length": 0.1734375,
+    "dgt_id": "1"
+  },
+  "7_jackson_13": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_13.wav",
+    "length": 0.2255,
+    "dgt_id": "7"
+  },
+  "0_theo_13": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_theo_13.wav",
+    "length": 0.211375,
+    "dgt_id": "0"
+  },
+  "1_jackson_47": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_jackson_47.wav",
+    "length": 0.280875,
+    "dgt_id": "1"
+  },
+  "5_jackson_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_jackson_18.wav",
+    "length": 0.17975,
+    "dgt_id": "5"
+  },
+  "4_nicolas_10": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_10.wav",
+    "length": 0.153875,
+    "dgt_id": "4"
+  },
+  "8_yweweler_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_yweweler_8.wav",
+    "length": 0.1551875,
+    "dgt_id": "8"
+  },
+  "9_jackson_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_jackson_4.wav",
+    "length": 0.2908125,
+    "dgt_id": "9"
+  },
+  "9_george_45": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_george_45.wav",
+    "length": 0.24825,
+    "dgt_id": "9"
+  },
+  "2_george_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_george_9.wav",
+    "length": 0.1780625,
+    "dgt_id": "2"
+  },
+  "8_nicolas_13": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_nicolas_13.wav",
+    "length": 0.19525,
+    "dgt_id": "8"
+  },
+  "7_george_36": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_george_36.wav",
+    "length": 0.253375,
+    "dgt_id": "7"
+  },
+  "5_theo_6": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_theo_6.wav",
+    "length": 0.1379375,
+    "dgt_id": "5"
+  },
+  "4_george_20": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_20.wav",
+    "length": 0.208375,
+    "dgt_id": "4"
+  },
+  "1_george_40": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_george_40.wav",
+    "length": 0.1780625,
+    "dgt_id": "1"
+  },
+  "9_lucas_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_lucas_18.wav",
+    "length": 0.3361875,
+    "dgt_id": "9"
+  },
+  "1_theo_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_theo_27.wav",
+    "length": 0.2393125,
+    "dgt_id": "1"
+  },
+  "0_yweweler_14": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_yweweler_14.wav",
+    "length": 0.2131875,
+    "dgt_id": "0"
+  },
+  "0_george_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_george_4.wav",
+    "length": 0.2701875,
+    "dgt_id": "0"
+  },
+  "4_george_31": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_31.wav",
+    "length": 0.19575,
+    "dgt_id": "4"
+  },
+  "9_yweweler_36": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_yweweler_36.wav",
+    "length": 0.2275,
+    "dgt_id": "9"
+  },
+  "7_george_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_george_4.wav",
+    "length": 0.3081875,
+    "dgt_id": "7"
+  },
+  "7_jackson_34": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_34.wav",
+    "length": 0.2539375,
+    "dgt_id": "7"
+  },
+  "4_yweweler_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_yweweler_9.wav",
+    "length": 0.170375,
+    "dgt_id": "4"
+  },
+  "7_george_15": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_george_15.wav",
+    "length": 0.250125,
+    "dgt_id": "7"
+  },
+  "1_george_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_george_46.wav",
+    "length": 0.1669375,
+    "dgt_id": "1"
+  },
+  "2_lucas_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_lucas_30.wav",
+    "length": 0.2839375,
+    "dgt_id": "2"
+  },
+  "0_george_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_george_27.wav",
+    "length": 0.2780625,
+    "dgt_id": "0"
+  },
+  "9_theo_13": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_theo_13.wav",
+    "length": 0.2385,
+    "dgt_id": "9"
+  },
+  "8_lucas_19": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_lucas_19.wav",
+    "length": 0.2650625,
+    "dgt_id": "8"
+  },
+  "7_jackson_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_27.wav",
+    "length": 0.2456875,
+    "dgt_id": "7"
+  },
+  "4_yweweler_22": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_yweweler_22.wav",
+    "length": 0.1363125,
+    "dgt_id": "4"
+  },
+  "1_theo_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_theo_30.wav",
+    "length": 0.219125,
+    "dgt_id": "1"
+  },
+  "7_lucas_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_lucas_33.wav",
+    "length": 0.2699375,
+    "dgt_id": "7"
+  },
+  "2_jackson_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_jackson_39.wav",
+    "length": 0.2296875,
+    "dgt_id": "2"
+  },
+  "2_yweweler_42": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_yweweler_42.wav",
+    "length": 0.129375,
+    "dgt_id": "2"
+  },
+  "3_nicolas_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_nicolas_33.wav",
+    "length": 0.158625,
+    "dgt_id": "3"
+  },
+  "3_nicolas_10": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_nicolas_10.wav",
+    "length": 0.172125,
+    "dgt_id": "3"
+  },
+  "7_lucas_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_lucas_38.wav",
+    "length": 0.266375,
+    "dgt_id": "7"
+  },
+  "5_jackson_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_jackson_30.wav",
+    "length": 0.2144375,
+    "dgt_id": "5"
+  },
+  "4_lucas_20": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_lucas_20.wav",
+    "length": 0.1328125,
+    "dgt_id": "4"
+  },
+  "4_nicolas_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_18.wav",
+    "length": 0.188375,
+    "dgt_id": "4"
+  },
+  "5_nicolas_48": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_nicolas_48.wav",
+    "length": 0.2076875,
+    "dgt_id": "5"
+  },
+  "2_jackson_25": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_jackson_25.wav",
+    "length": 0.26825,
+    "dgt_id": "2"
+  },
+  "7_nicolas_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_nicolas_38.wav",
+    "length": 0.1803125,
+    "dgt_id": "7"
+  },
+  "3_theo_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_49.wav",
+    "length": 0.1070625,
+    "dgt_id": "3"
+  },
+  "4_george_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_9.wav",
+    "length": 0.2713125,
+    "dgt_id": "4"
+  },
+  "7_george_0": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_george_0.wav",
+    "length": 0.3206875,
+    "dgt_id": "7"
+  },
+  "2_theo_37": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_theo_37.wav",
+    "length": 0.1336875,
+    "dgt_id": "2"
+  },
+  "3_george_26": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_george_26.wav",
+    "length": 0.2008125,
+    "dgt_id": "3"
+  },
+  "6_yweweler_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_yweweler_30.wav",
+    "length": 0.1533125,
+    "dgt_id": "6"
+  },
+  "9_yweweler_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_yweweler_4.wav",
+    "length": 0.21,
+    "dgt_id": "9"
+  },
+  "0_theo_26": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_theo_26.wav",
+    "length": 0.2393125,
+    "dgt_id": "0"
+  },
+  "6_theo_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_theo_16.wav",
+    "length": 0.1805625,
+    "dgt_id": "6"
+  },
+  "4_lucas_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_lucas_17.wav",
+    "length": 0.29025,
+    "dgt_id": "4"
+  },
+  "1_jackson_44": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_jackson_44.wav",
+    "length": 0.29075,
+    "dgt_id": "1"
+  },
+  "7_lucas_6": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_lucas_6.wav",
+    "length": 0.2723125,
+    "dgt_id": "7"
+  },
+  "9_jackson_3": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_jackson_3.wav",
+    "length": 0.26875,
+    "dgt_id": "9"
+  },
+  "6_lucas_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_lucas_1.wav",
+    "length": 0.311125,
+    "dgt_id": "6"
+  },
+  "2_lucas_12": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_lucas_12.wav",
+    "length": 0.45925,
+    "dgt_id": "2"
+  },
+  "6_lucas_2": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_lucas_2.wav",
+    "length": 0.2405,
+    "dgt_id": "6"
+  },
+  "4_yweweler_44": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_yweweler_44.wav",
+    "length": 0.1819375,
+    "dgt_id": "4"
+  },
+  "2_yweweler_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_yweweler_39.wav",
+    "length": 0.1745,
+    "dgt_id": "2"
+  },
+  "0_yweweler_29": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_yweweler_29.wav",
+    "length": 0.1880625,
+    "dgt_id": "0"
+  },
+  "4_nicolas_14": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_14.wav",
+    "length": 0.1539375,
+    "dgt_id": "4"
+  },
+  "5_lucas_45": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_lucas_45.wav",
+    "length": 0.4514375,
+    "dgt_id": "5"
+  },
+  "8_theo_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_theo_17.wav",
+    "length": 0.1723125,
+    "dgt_id": "8"
+  },
+  "0_lucas_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_lucas_18.wav",
+    "length": 0.306,
+    "dgt_id": "0"
+  },
+  "7_lucas_21": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_lucas_21.wav",
+    "length": 0.297375,
+    "dgt_id": "7"
+  },
+  "4_lucas_25": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_lucas_25.wav",
+    "length": 0.274,
+    "dgt_id": "4"
+  },
+  "4_theo_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_theo_9.wav",
+    "length": 0.1318125,
+    "dgt_id": "4"
+  },
+  "2_george_3": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_george_3.wav",
+    "length": 0.197875,
+    "dgt_id": "2"
+  },
+  "5_yweweler_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_yweweler_49.wav",
+    "length": 0.2364375,
+    "dgt_id": "5"
+  },
+  "3_nicolas_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_nicolas_46.wav",
+    "length": 0.1615,
+    "dgt_id": "3"
+  },
+  "0_lucas_6": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_lucas_6.wav",
+    "length": 0.268,
+    "dgt_id": "0"
+  },
+  "1_yweweler_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_16.wav",
+    "length": 0.1725,
+    "dgt_id": "1"
+  },
+  "4_george_32": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_32.wav",
+    "length": 0.2065,
+    "dgt_id": "4"
+  },
+  "0_lucas_34": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_lucas_34.wav",
+    "length": 0.3254375,
+    "dgt_id": "0"
+  },
+  "6_lucas_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_lucas_27.wav",
+    "length": 0.233875,
+    "dgt_id": "6"
+  },
+  "3_yweweler_48": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_yweweler_48.wav",
+    "length": 0.154625,
+    "dgt_id": "3"
+  },
+  "8_theo_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_theo_49.wav",
+    "length": 0.1561875,
+    "dgt_id": "8"
+  },
+  "3_theo_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_33.wav",
+    "length": 0.1373125,
+    "dgt_id": "3"
+  },
+  "1_yweweler_28": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_28.wav",
+    "length": 0.13875,
+    "dgt_id": "1"
+  },
+  "6_jackson_20": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_20.wav",
+    "length": 0.3448125,
+    "dgt_id": "6"
+  },
+  "6_yweweler_44": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_yweweler_44.wav",
+    "length": 0.0901875,
+    "dgt_id": "6"
+  },
+  "7_theo_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_theo_38.wav",
+    "length": 0.1875625,
+    "dgt_id": "7"
+  },
+  "6_george_15": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_george_15.wav",
+    "length": 0.2026875,
+    "dgt_id": "6"
+  },
+  "9_theo_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_theo_4.wav",
+    "length": 0.2209375,
+    "dgt_id": "9"
+  },
+  "4_nicolas_42": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_42.wav",
+    "length": 0.20025,
+    "dgt_id": "4"
+  },
+  "8_nicolas_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_nicolas_30.wav",
+    "length": 0.1890625,
+    "dgt_id": "8"
+  },
+  "5_yweweler_35": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_yweweler_35.wav",
+    "length": 0.2289375,
+    "dgt_id": "5"
+  },
+  "9_george_12": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_george_12.wav",
+    "length": 0.2425625,
+    "dgt_id": "9"
+  },
+  "4_yweweler_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_yweweler_16.wav",
+    "length": 0.1341875,
+    "dgt_id": "4"
+  },
+  "8_theo_35": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_theo_35.wav",
+    "length": 0.1669375,
+    "dgt_id": "8"
+  },
+  "7_theo_23": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_theo_23.wav",
+    "length": 0.2520625,
+    "dgt_id": "7"
+  },
+  "2_jackson_42": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_jackson_42.wav",
+    "length": 0.2940625,
+    "dgt_id": "2"
+  },
+  "0_yweweler_5": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_yweweler_5.wav",
+    "length": 0.2016875,
+    "dgt_id": "0"
+  },
+  "5_george_22": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_george_22.wav",
+    "length": 0.2215,
+    "dgt_id": "5"
+  },
+  "7_theo_28": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_theo_28.wav",
+    "length": 0.2300625,
+    "dgt_id": "7"
+  },
+  "0_jackson_2": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_jackson_2.wav",
+    "length": 0.2660625,
+    "dgt_id": "0"
+  },
+  "9_lucas_28": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_lucas_28.wav",
+    "length": 0.244875,
+    "dgt_id": "9"
+  },
+  "4_theo_25": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_theo_25.wav",
+    "length": 0.19525,
+    "dgt_id": "4"
+  },
+  "3_lucas_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_lucas_39.wav",
+    "length": 0.2300625,
+    "dgt_id": "3"
+  },
+  "5_lucas_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_lucas_33.wav",
+    "length": 0.30425,
+    "dgt_id": "5"
+  },
+  "4_theo_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_theo_49.wav",
+    "length": 0.1686875,
+    "dgt_id": "4"
+  },
+  "3_george_47": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_george_47.wav",
+    "length": 0.165125,
+    "dgt_id": "3"
+  },
+  "8_theo_6": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_theo_6.wav",
+    "length": 0.196375,
+    "dgt_id": "8"
+  },
+  "9_theo_26": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_theo_26.wav",
+    "length": 0.278125,
+    "dgt_id": "9"
+  },
+  "3_george_32": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_george_32.wav",
+    "length": 0.1564375,
+    "dgt_id": "3"
+  },
+  "7_jackson_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_1.wav",
+    "length": 0.2368125,
+    "dgt_id": "7"
+  },
+  "5_nicolas_47": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_nicolas_47.wav",
+    "length": 0.20975,
+    "dgt_id": "5"
+  },
+  "5_george_48": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_george_48.wav",
+    "length": 0.1840625,
+    "dgt_id": "5"
+  },
+  "2_jackson_31": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_jackson_31.wav",
+    "length": 0.2335,
+    "dgt_id": "2"
+  },
+  "4_nicolas_47": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_47.wav",
+    "length": 0.1798125,
+    "dgt_id": "4"
+  },
+  "5_yweweler_29": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_yweweler_29.wav",
+    "length": 0.2423125,
+    "dgt_id": "5"
+  },
+  "1_yweweler_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_38.wav",
+    "length": 0.1838125,
+    "dgt_id": "1"
+  },
+  "5_nicolas_23": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_nicolas_23.wav",
+    "length": 0.180625,
+    "dgt_id": "5"
+  },
+  "1_jackson_22": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_jackson_22.wav",
+    "length": 0.221875,
+    "dgt_id": "1"
+  },
+  "4_yweweler_7": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_yweweler_7.wav",
+    "length": 0.137375,
+    "dgt_id": "4"
+  },
+  "6_yweweler_32": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_yweweler_32.wav",
+    "length": 0.093875,
+    "dgt_id": "6"
+  },
+  "4_jackson_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_jackson_46.wav",
+    "length": 0.2555625,
+    "dgt_id": "4"
+  },
+  "0_lucas_13": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_lucas_13.wav",
+    "length": 0.296,
+    "dgt_id": "0"
+  },
+  "3_lucas_2": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_lucas_2.wav",
+    "length": 0.292,
+    "dgt_id": "3"
+  },
+  "3_theo_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_46.wav",
+    "length": 0.2475,
+    "dgt_id": "3"
+  },
+  "7_jackson_6": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_6.wav",
+    "length": 0.2229375,
+    "dgt_id": "7"
+  },
+  "9_yweweler_37": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_yweweler_37.wav",
+    "length": 0.17275,
+    "dgt_id": "9"
+  },
+  "6_yweweler_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_yweweler_27.wav",
+    "length": 0.105125,
+    "dgt_id": "6"
+  },
+  "2_nicolas_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_nicolas_17.wav",
+    "length": 0.152875,
+    "dgt_id": "2"
+  },
+  "4_jackson_24": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_jackson_24.wav",
+    "length": 0.1980625,
+    "dgt_id": "4"
+  },
+  "4_george_26": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_26.wav",
+    "length": 0.2610625,
+    "dgt_id": "4"
+  },
+  "6_jackson_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_39.wav",
+    "length": 0.33175,
+    "dgt_id": "6"
+  },
+  "9_lucas_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_lucas_27.wav",
+    "length": 0.174,
+    "dgt_id": "9"
+  },
+  "5_lucas_22": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_lucas_22.wav",
+    "length": 0.2889375,
+    "dgt_id": "5"
+  },
+  "4_theo_45": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_theo_45.wav",
+    "length": 0.182625,
+    "dgt_id": "4"
+  },
+  "4_jackson_36": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_jackson_36.wav",
+    "length": 0.1996875,
+    "dgt_id": "4"
+  },
+  "2_lucas_42": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_lucas_42.wav",
+    "length": 0.238875,
+    "dgt_id": "2"
+  },
+  "3_lucas_12": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_lucas_12.wav",
+    "length": 0.322375,
+    "dgt_id": "3"
+  },
+  "3_theo_45": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_45.wav",
+    "length": 0.1660625,
+    "dgt_id": "3"
+  },
+  "4_nicolas_35": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_35.wav",
+    "length": 0.1548125,
+    "dgt_id": "4"
+  },
+  "6_lucas_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_lucas_33.wav",
+    "length": 0.48875,
+    "dgt_id": "6"
+  },
+  "5_theo_0": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_theo_0.wav",
+    "length": 0.1516875,
+    "dgt_id": "5"
+  },
+  "2_yweweler_0": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_yweweler_0.wav",
+    "length": 0.1374375,
+    "dgt_id": "2"
+  },
+  "3_theo_21": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_21.wav",
+    "length": 0.268375,
+    "dgt_id": "3"
+  },
+  "1_george_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_george_8.wav",
+    "length": 0.268375,
+    "dgt_id": "1"
+  },
+  "2_nicolas_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_nicolas_16.wav",
+    "length": 0.1653125,
+    "dgt_id": "2"
+  },
+  "4_jackson_11": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_jackson_11.wav",
+    "length": 0.18825,
+    "dgt_id": "4"
+  },
+  "5_lucas_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_lucas_46.wav",
+    "length": 0.339125,
+    "dgt_id": "5"
+  },
+  "0_jackson_47": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_jackson_47.wav",
+    "length": 0.333,
+    "dgt_id": "0"
+  },
+  "8_jackson_23": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_23.wav",
+    "length": 0.2185,
+    "dgt_id": "8"
+  },
+  "6_jackson_6": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_6.wav",
+    "length": 0.379625,
+    "dgt_id": "6"
+  },
+  "4_george_7": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_7.wav",
+    "length": 0.2525625,
+    "dgt_id": "4"
+  },
+  "8_lucas_37": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_lucas_37.wav",
+    "length": 0.244125,
+    "dgt_id": "8"
+  },
+  "3_lucas_43": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_lucas_43.wav",
+    "length": 0.3389375,
+    "dgt_id": "3"
+  },
+  "9_lucas_41": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_lucas_41.wav",
+    "length": 0.281375,
+    "dgt_id": "9"
+  },
+  "3_yweweler_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_yweweler_16.wav",
+    "length": 0.17425,
+    "dgt_id": "3"
+  },
+  "4_nicolas_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_8.wav",
+    "length": 0.143,
+    "dgt_id": "4"
+  },
+  "6_george_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_george_46.wav",
+    "length": 0.212375,
+    "dgt_id": "6"
+  },
+  "0_jackson_11": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_jackson_11.wav",
+    "length": 0.307125,
+    "dgt_id": "0"
+  },
+  "1_george_24": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_george_24.wav",
+    "length": 0.264875,
+    "dgt_id": "1"
+  },
+  "5_nicolas_11": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_nicolas_11.wav",
+    "length": 0.2385625,
+    "dgt_id": "5"
+  },
+  "4_theo_40": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_theo_40.wav",
+    "length": 0.2269375,
+    "dgt_id": "4"
+  },
+  "6_yweweler_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_yweweler_18.wav",
+    "length": 0.1398125,
+    "dgt_id": "6"
+  },
+  "2_nicolas_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_nicolas_27.wav",
+    "length": 0.116625,
+    "dgt_id": "2"
+  },
+  "9_theo_25": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_theo_25.wav",
+    "length": 0.2199375,
+    "dgt_id": "9"
+  },
+  "2_lucas_31": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_lucas_31.wav",
+    "length": 0.3059375,
+    "dgt_id": "2"
+  },
+  "0_yweweler_10": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_yweweler_10.wav",
+    "length": 0.190125,
+    "dgt_id": "0"
+  },
+  "1_nicolas_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_nicolas_38.wav",
+    "length": 0.153375,
+    "dgt_id": "1"
+  },
+  "2_theo_29": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_theo_29.wav",
+    "length": 0.2126875,
+    "dgt_id": "2"
+  },
+  "5_nicolas_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_nicolas_18.wav",
+    "length": 0.1924375,
+    "dgt_id": "5"
+  },
+  "3_theo_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_18.wav",
+    "length": 0.14875,
+    "dgt_id": "3"
+  },
+  "3_yweweler_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_yweweler_38.wav",
+    "length": 0.139375,
+    "dgt_id": "3"
+  },
+  "3_theo_32": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_32.wav",
+    "length": 0.1286875,
+    "dgt_id": "3"
+  },
+  "9_george_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_george_17.wav",
+    "length": 0.298625,
+    "dgt_id": "9"
+  },
+  "8_yweweler_36": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_yweweler_36.wav",
+    "length": 0.1470625,
+    "dgt_id": "8"
+  },
+  "7_george_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_george_9.wav",
+    "length": 0.2841875,
+    "dgt_id": "7"
+  },
+  "8_jackson_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_1.wav",
+    "length": 0.2018125,
+    "dgt_id": "8"
+  },
+  "1_nicolas_29": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_nicolas_29.wav",
+    "length": 0.159375,
+    "dgt_id": "1"
+  },
+  "7_jackson_26": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_26.wav",
+    "length": 0.2425,
+    "dgt_id": "7"
+  },
+  "7_lucas_40": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_lucas_40.wav",
+    "length": 0.3226875,
+    "dgt_id": "7"
+  },
+  "5_george_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_george_33.wav",
+    "length": 0.1754375,
+    "dgt_id": "5"
+  },
+  "8_nicolas_47": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_nicolas_47.wav",
+    "length": 0.199,
+    "dgt_id": "8"
+  },
+  "3_nicolas_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_nicolas_30.wav",
+    "length": 0.164375,
+    "dgt_id": "3"
+  },
+  "1_george_19": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_george_19.wav",
+    "length": 0.2450625,
+    "dgt_id": "1"
+  },
+  "3_lucas_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_lucas_16.wav",
+    "length": 0.3914375,
+    "dgt_id": "3"
+  },
+  "6_jackson_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_8.wav",
+    "length": 0.4140625,
+    "dgt_id": "6"
+  },
+  "4_lucas_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_lucas_30.wav",
+    "length": 0.2500625,
+    "dgt_id": "4"
+  },
+  "5_theo_5": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_theo_5.wav",
+    "length": 0.1616875,
+    "dgt_id": "5"
+  },
+  "4_lucas_5": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_lucas_5.wav",
+    "length": 0.2559375,
+    "dgt_id": "4"
+  },
+  "8_theo_14": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_theo_14.wav",
+    "length": 0.162875,
+    "dgt_id": "8"
+  },
+  "5_yweweler_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_yweweler_8.wav",
+    "length": 0.2199375,
+    "dgt_id": "5"
+  },
+  "9_nicolas_44": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_nicolas_44.wav",
+    "length": 0.213375,
+    "dgt_id": "9"
+  },
+  "1_lucas_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_lucas_39.wav",
+    "length": 0.2130625,
+    "dgt_id": "1"
+  },
+  "2_yweweler_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_yweweler_49.wav",
+    "length": 0.151,
+    "dgt_id": "2"
+  },
+  "3_lucas_11": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_lucas_11.wav",
+    "length": 0.2856875,
+    "dgt_id": "3"
+  },
+  "5_theo_35": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_theo_35.wav",
+    "length": 0.2413125,
+    "dgt_id": "5"
+  },
+  "1_jackson_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_jackson_38.wav",
+    "length": 0.2488125,
+    "dgt_id": "1"
+  },
+  "0_yweweler_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_yweweler_8.wav",
+    "length": 0.167875,
+    "dgt_id": "0"
+  },
+  "1_lucas_24": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_lucas_24.wav",
+    "length": 0.3075625,
+    "dgt_id": "1"
+  },
+  "6_jackson_11": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_11.wav",
+    "length": 0.4326875,
+    "dgt_id": "6"
+  },
+  "9_lucas_43": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_lucas_43.wav",
+    "length": 0.3088125,
+    "dgt_id": "9"
+  },
+  "0_jackson_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_jackson_1.wav",
+    "length": 0.2663125,
+    "dgt_id": "0"
+  },
+  "9_george_41": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_george_41.wav",
+    "length": 0.245625,
+    "dgt_id": "9"
+  },
+  "7_lucas_14": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_lucas_14.wav",
+    "length": 0.312,
+    "dgt_id": "7"
+  },
+  "2_yweweler_15": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_yweweler_15.wav",
+    "length": 0.1456875,
+    "dgt_id": "2"
+  },
+  "4_nicolas_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_46.wav",
+    "length": 0.15325,
+    "dgt_id": "4"
+  },
+  "3_jackson_45": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_jackson_45.wav",
+    "length": 0.284875,
+    "dgt_id": "3"
+  },
+  "2_nicolas_24": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_nicolas_24.wav",
+    "length": 0.108875,
+    "dgt_id": "2"
+  },
+  "8_jackson_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_9.wav",
+    "length": 0.1901875,
+    "dgt_id": "8"
+  },
+  "7_jackson_11": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_11.wav",
+    "length": 0.2045625,
+    "dgt_id": "7"
+  },
+  "0_jackson_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_jackson_30.wav",
+    "length": 0.32,
+    "dgt_id": "0"
+  },
+  "0_nicolas_19": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_nicolas_19.wav",
+    "length": 0.2305,
+    "dgt_id": "0"
+  },
+  "2_yweweler_22": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_yweweler_22.wav",
+    "length": 0.151625,
+    "dgt_id": "2"
+  },
+  "6_jackson_28": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_28.wav",
+    "length": 0.3233125,
+    "dgt_id": "6"
+  },
+  "1_lucas_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_lucas_46.wav",
+    "length": 0.186,
+    "dgt_id": "1"
+  },
+  "9_nicolas_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_nicolas_16.wav",
+    "length": 0.2174375,
+    "dgt_id": "9"
+  },
+  "7_jackson_28": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_jackson_28.wav",
+    "length": 0.213125,
+    "dgt_id": "7"
+  },
+  "7_nicolas_20": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_nicolas_20.wav",
+    "length": 0.16975,
+    "dgt_id": "7"
+  },
+  "3_jackson_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_jackson_17.wav",
+    "length": 0.2250625,
+    "dgt_id": "3"
+  },
+  "3_theo_34": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_34.wav",
+    "length": 0.0975,
+    "dgt_id": "3"
+  },
+  "3_yweweler_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_yweweler_9.wav",
+    "length": 0.151125,
+    "dgt_id": "3"
+  },
+  "6_yweweler_0": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_yweweler_0.wav",
+    "length": 0.1658125,
+    "dgt_id": "6"
+  },
+  "5_yweweler_22": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_yweweler_22.wav",
+    "length": 0.260875,
+    "dgt_id": "5"
+  },
+  "3_theo_28": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_28.wav",
+    "length": 0.19275,
+    "dgt_id": "3"
+  },
+  "3_yweweler_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_yweweler_49.wav",
+    "length": 0.1298125,
+    "dgt_id": "3"
+  },
+  "9_nicolas_35": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_nicolas_35.wav",
+    "length": 0.1948125,
+    "dgt_id": "9"
+  },
+  "4_george_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_1.wav",
+    "length": 0.2694375,
+    "dgt_id": "4"
+  },
+  "7_theo_19": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_theo_19.wav",
+    "length": 0.146375,
+    "dgt_id": "7"
+  },
+  "6_theo_13": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_theo_13.wav",
+    "length": 0.1700625,
+    "dgt_id": "6"
+  },
+  "6_george_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_george_9.wav",
+    "length": 0.295,
+    "dgt_id": "6"
+  },
+  "0_yweweler_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_yweweler_4.wav",
+    "length": 0.1581875,
+    "dgt_id": "0"
+  },
+  "8_jackson_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_33.wav",
+    "length": 0.2238125,
+    "dgt_id": "8"
+  },
+  "7_george_41": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_george_41.wav",
+    "length": 0.2408125,
+    "dgt_id": "7"
+  },
+  "6_jackson_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_30.wav",
+    "length": 0.398125,
+    "dgt_id": "6"
+  },
+  "4_yweweler_10": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_yweweler_10.wav",
+    "length": 0.181125,
+    "dgt_id": "4"
+  },
+  "1_yweweler_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_49.wav",
+    "length": 0.2058125,
+    "dgt_id": "1"
+  },
+  "2_lucas_34": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_lucas_34.wav",
+    "length": 0.259,
+    "dgt_id": "2"
+  },
+  "6_jackson_12": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_jackson_12.wav",
+    "length": 0.43025,
+    "dgt_id": "6"
+  },
+  "4_george_48": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_48.wav",
+    "length": 0.2354375,
+    "dgt_id": "4"
+  },
+  "7_theo_49": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_theo_49.wav",
+    "length": 0.1780625,
+    "dgt_id": "7"
+  },
+  "1_yweweler_33": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_33.wav",
+    "length": 0.215625,
+    "dgt_id": "1"
+  },
+  "1_nicolas_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_nicolas_8.wav",
+    "length": 0.1241875,
+    "dgt_id": "1"
+  },
+  "6_nicolas_5": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_nicolas_5.wav",
+    "length": 0.2351875,
+    "dgt_id": "6"
+  },
+  "4_yweweler_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_yweweler_17.wav",
+    "length": 0.1701875,
+    "dgt_id": "4"
+  },
+  "9_george_23": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_george_23.wav",
+    "length": 0.298875,
+    "dgt_id": "9"
+  },
+  "5_jackson_45": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_jackson_45.wav",
+    "length": 0.2308125,
+    "dgt_id": "5"
+  },
+  "8_nicolas_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_nicolas_1.wav",
+    "length": 0.1128125,
+    "dgt_id": "8"
+  },
+  "2_nicolas_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_nicolas_1.wav",
+    "length": 0.1490625,
+    "dgt_id": "2"
+  },
+  "8_george_25": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_george_25.wav",
+    "length": 0.2295625,
+    "dgt_id": "8"
+  },
+  "9_yweweler_45": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_yweweler_45.wav",
+    "length": 0.2118125,
+    "dgt_id": "9"
+  },
+  "9_george_24": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_george_24.wav",
+    "length": 0.2019375,
+    "dgt_id": "9"
+  },
+  "2_jackson_16": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_jackson_16.wav",
+    "length": 0.2378125,
+    "dgt_id": "2"
+  },
+  "8_jackson_26": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_26.wav",
+    "length": 0.2300625,
+    "dgt_id": "8"
+  },
+  "3_jackson_43": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_jackson_43.wav",
+    "length": 0.2505,
+    "dgt_id": "3"
+  },
+  "0_jackson_20": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_jackson_20.wav",
+    "length": 0.310625,
+    "dgt_id": "0"
+  },
+  "4_lucas_3": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_lucas_3.wav",
+    "length": 0.2205625,
+    "dgt_id": "4"
+  },
+  "3_lucas_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_lucas_46.wav",
+    "length": 0.32725,
+    "dgt_id": "3"
+  },
+  "9_lucas_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_lucas_46.wav",
+    "length": 0.261625,
+    "dgt_id": "9"
+  },
+  "1_jackson_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_jackson_18.wav",
+    "length": 0.226375,
+    "dgt_id": "1"
+  },
+  "2_theo_44": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_theo_44.wav",
+    "length": 0.1129375,
+    "dgt_id": "2"
+  },
+  "1_nicolas_43": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_nicolas_43.wav",
+    "length": 0.158,
+    "dgt_id": "1"
+  },
+  "5_yweweler_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_yweweler_30.wav",
+    "length": 0.2081875,
+    "dgt_id": "5"
+  },
+  "7_nicolas_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_nicolas_18.wav",
+    "length": 0.199125,
+    "dgt_id": "7"
+  },
+  "6_theo_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_theo_1.wav",
+    "length": 0.2405625,
+    "dgt_id": "6"
+  },
+  "3_theo_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_38.wav",
+    "length": 0.1810625,
+    "dgt_id": "3"
+  },
+  "0_lucas_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/0_lucas_30.wav",
+    "length": 0.28925,
+    "dgt_id": "0"
+  },
+  "8_george_37": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_george_37.wav",
+    "length": 0.208875,
+    "dgt_id": "8"
+  },
+  "1_yweweler_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_1.wav",
+    "length": 0.1115625,
+    "dgt_id": "1"
+  },
+  "4_nicolas_37": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_37.wav",
+    "length": 0.182375,
+    "dgt_id": "4"
+  },
+  "1_lucas_43": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_lucas_43.wav",
+    "length": 0.3558125,
+    "dgt_id": "1"
+  },
+  "1_george_27": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_george_27.wav",
+    "length": 0.280625,
+    "dgt_id": "1"
+  },
+  "4_nicolas_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_nicolas_39.wav",
+    "length": 0.12725,
+    "dgt_id": "4"
+  },
+  "3_jackson_38": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_jackson_38.wav",
+    "length": 0.2651875,
+    "dgt_id": "3"
+  },
+  "1_yweweler_12": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_yweweler_12.wav",
+    "length": 0.1835625,
+    "dgt_id": "1"
+  },
+  "5_nicolas_36": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_nicolas_36.wav",
+    "length": 0.2190625,
+    "dgt_id": "5"
+  },
+  "2_lucas_1": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_lucas_1.wav",
+    "length": 0.2093125,
+    "dgt_id": "2"
+  },
+  "8_jackson_32": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_jackson_32.wav",
+    "length": 0.2284375,
+    "dgt_id": "8"
+  },
+  "6_lucas_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_lucas_17.wav",
+    "length": 0.290375,
+    "dgt_id": "6"
+  },
+  "1_lucas_8": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_lucas_8.wav",
+    "length": 0.241625,
+    "dgt_id": "1"
+  },
+  "9_theo_30": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_theo_30.wav",
+    "length": 0.4035625,
+    "dgt_id": "9"
+  },
+  "2_theo_42": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_theo_42.wav",
+    "length": 0.132,
+    "dgt_id": "2"
+  },
+  "9_george_25": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/9_george_25.wav",
+    "length": 0.2365625,
+    "dgt_id": "9"
+  },
+  "1_theo_17": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/1_theo_17.wav",
+    "length": 0.131375,
+    "dgt_id": "1"
+  },
+  "2_yweweler_4": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_yweweler_4.wav",
+    "length": 0.1455,
+    "dgt_id": "2"
+  },
+  "3_nicolas_36": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_nicolas_36.wav",
+    "length": 0.1185,
+    "dgt_id": "3"
+  },
+  "2_george_0": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/2_george_0.wav",
+    "length": 0.1651875,
+    "dgt_id": "2"
+  },
+  "4_george_18": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/4_george_18.wav",
+    "length": 0.2885,
+    "dgt_id": "4"
+  },
+  "3_george_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_george_46.wav",
+    "length": 0.207125,
+    "dgt_id": "3"
+  },
+  "6_george_11": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/6_george_11.wav",
+    "length": 0.1885,
+    "dgt_id": "6"
+  },
+  "3_theo_37": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/3_theo_37.wav",
+    "length": 0.13825,
+    "dgt_id": "3"
+  },
+  "5_theo_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/5_theo_39.wav",
+    "length": 0.1760625,
+    "dgt_id": "5"
+  },
+  "7_nicolas_9": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_nicolas_9.wav",
+    "length": 0.1861875,
+    "dgt_id": "7"
+  },
+  "7_theo_46": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/7_theo_46.wav",
+    "length": 0.190625,
+    "dgt_id": "7"
+  },
+  "8_yweweler_39": {
+    "wav": "{data_root}/digit_recognition/audioMNIST/data/recordings/8_yweweler_39.wav",
+    "length": 0.174875,
+    "dgt_id": "8"
+  }
+}
