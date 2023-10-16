@@ -40,7 +40,7 @@ n_mels: 40
 
 # Training Parameters
 sample_rate: 8000
-number_of_epochs: 35
+number_of_epochs: 50
 batch_size: 16
 lr_start: 0.001
 lr_final: 0.0001
