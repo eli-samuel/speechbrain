@@ -1,103 +1,271 @@
-#!/usr/bin/env python3
-"""Recipe for training an emotion recognition system from speech data only using IEMOCAP.
-The system classifies 4 emotions ( anger, happiness, sadness, neutrality)
-with an ECAPA-TDNN model.
-
-To run this recipe, do the following:
-
-> python train.py hparams/train.yaml --data_folder /path/to/IEMOCAP
-
-Authors
- * Pierre-Yves Yanni 2021
+# -*- coding: utf-8 -*-
 """
+ Recipe for training the Zero-Shot Multi-Speaker Tacotron Text-To-Speech model, an end-to-end
+ neural text-to-speech (TTS) system
 
-import os
-import sys
-import csv
-import speechbrain as sb
+ To run this recipe, do the following:
+ # python train.py --device=cuda:0 --max_grad_norm=1.0 --data_folder=/path_to_data_folder hparams/train.yaml
+
+ Authors
+ * Georges Abous-Rjeili 2021
+ * Artem Ploujnikov 2021
+ * Yingzhi Wang 2022
+ * Pradnya Kandarkar 2023
+"""
 import torch
-from torch.utils.data import DataLoader
-from enum import Enum, auto
-from tqdm.contrib import tqdm
+import speechbrain as sb
+import sys
+import logging
 from hyperpyyaml import load_hyperpyyaml
+from speechbrain.utils.text_to_sequence import text_to_sequence
+from speechbrain.utils.data_utils import scalarize
+import os
+from speechbrain.pretrained import HIFIGAN
+import torchaudio
+
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+logger = logging.getLogger(__name__)
 
 
-class EmoIdBrain(sb.Brain):
+class Tacotron2Brain(sb.Brain):
+    """The Brain implementation for Tacotron2"""
+
+    def on_fit_start(self):
+        """Gets called at the beginning of ``fit()``, on multiple processes
+        if ``distributed_count > 0`` and backend is ddp and initializes statistics"""
+        self.hparams.progress_sample_logger.reset()
+        self.last_epoch = 0
+        self.last_batch = None
+        self.last_preds = None
+
+        # Instantiate a vocoder if audio samples should be logged
+        if self.hparams.log_audio_samples:
+            self.vocoder = HIFIGAN.from_hparams(
+                source=self.hparams.vocoder,
+                savedir=self.hparams.vocoder_savedir,
+                run_opts={"device": self.device},
+                freeze_params=True,
+            )
+
+        self.last_loss_stats = {}
+        return super().on_fit_start()
+
     def compute_forward(self, batch, stage):
-        """Computation pipeline based on a encoder + emotion classifier.
-        """
-        batch = batch.to(self.device)
-        wavs, lens = batch.sig
-
-        # Feature extraction and normalization
-        feats = self.modules.compute_features(wavs)
-        feats = self.modules.mean_var_norm(feats, lens)
-
-        # Embeddings + speaker classifier
-        embeddings = self.modules.embedding_model(feats, lens)
-        outputs = self.modules.classifier(embeddings)
-
-        return outputs
-
-    def fit_batch(self, batch):
-        """Trains the parameters given a single batch in input"""
-
-        predictions = self.compute_forward(batch, sb.Stage.TRAIN)
-        loss = self.compute_objectives(predictions, batch, sb.Stage.TRAIN)
-
-        # normalize the loss by gradient_accumulation step
-        (loss / self.hparams.gradient_accumulation).backward()
-
-        if self.step % self.hparams.gradient_accumulation == 0:
-            # gradient clipping & early stop if loss is not finite
-            self.check_gradients(loss)
-            self.optimizer.step()
-            self.optimizer.zero_grad()
-
-        return loss.detach()
-
-    def compute_objectives(self, predictions, batch, stage):
-        """Computes the loss using speaker-id as label.
-        """
-        _, lens = batch.sig
-        emoid, _ = batch.emo_encoded
-
-        # Concatenate labels (due to data augmentation)
-        if stage == sb.Stage.TRAIN:
-
-            if hasattr(self.hparams.lr_annealing, "on_batch_end"):
-                self.hparams.lr_annealing.on_batch_end(self.optimizer)
-
-        loss = self.hparams.compute_cost(predictions, emoid, lens)
-
-        if stage != sb.Stage.TRAIN:
-            self.error_metrics.append(batch.id, predictions, emoid, lens)
-
-        return loss
-
-    def on_stage_start(self, stage, epoch=None):
-        """Gets called at the beginning of each epoch.
+        """Computes the forward pass
 
         Arguments
         ---------
-        stage : sb.Stage
-            One of sb.Stage.TRAIN, sb.Stage.VALID, or sb.Stage.TEST.
-        epoch : int
-            The currently-starting epoch. This is passed
-            `None` during the test stage.
-        """
+        batch: str
+            a single batch
+        stage: speechbrain.Stage
+            the training stage
 
-        # Set up statistics trackers for this stage
-        self.loss_metric = sb.utils.metric_stats.MetricStats(
-            metric=sb.nnet.losses.nll_loss
+        Returns
+        -------
+        the model output
+        """
+        effective_batch = self.batch_to_device(batch)
+        inputs, y, num_items, _, _, spk_embs, spk_ids = effective_batch
+
+        _, input_lengths, _, _, _ = inputs
+
+        max_input_length = input_lengths.max().item()
+
+        return self.modules.model(
+            inputs, spk_embs, alignments_dim=max_input_length
         )
 
-        # Set up evaluation-only statistics trackers
-        if stage != sb.Stage.TRAIN:
-            self.error_metrics = self.hparams.error_stats()
+    def fit_batch(self, batch):
+        """Fits a single batch and applies annealing
 
-    def on_stage_end(self, stage, stage_loss, epoch=None):
-        """Gets called at the end of an epoch.
+        Arguments
+        ---------
+        batch: tuple
+            a training batch
+
+        Returns
+        -------
+        loss: torch.Tensor
+            detached loss
+        """
+        result = super().fit_batch(batch)
+        self.hparams.lr_annealing(self.optimizer)
+        return result
+
+    def compute_objectives(self, predictions, batch, stage):
+        """Computes the loss given the predicted and targeted outputs
+
+        Arguments
+        ---------
+        predictions : torch.Tensor
+            The model generated mel-spectrograms and other metrics from `compute_forward`
+        batch : PaddedBatch
+            This batch object contains all the relevant tensors for computation
+        stage : sb.Stage
+            One of sb.Stage.TRAIN, sb.Stage.VALID, or sb.Stage.TEST
+
+        Returns
+        -------
+        loss : torch.Tensor
+            A one-element tensor used for backpropagating the gradient
+        """
+        effective_batch = self.batch_to_device(batch)
+        # Hold on to the batch for the inference sample.
+        # This is needed because the infernece sample is run from on_stage_end only,
+        # where batch information is not available
+        self.last_batch = effective_batch
+        self.last_preds = predictions
+        # Hold on to a sample (for logging)
+        self._remember_sample(effective_batch, predictions)
+        # Compute the loss
+        loss = self._compute_loss(predictions, effective_batch, stage)
+        return loss
+
+    def _compute_loss(self, predictions, batch, stage):
+        """Computes the value of the loss function and updates stats
+
+        Arguments
+        ---------
+        predictions: tuple
+            model predictions
+        batch : PaddedBatch
+            This batch object contains all the relevant tensors for computation
+        stage : sb.Stage
+            One of sb.Stage.TRAIN, sb.Stage.VALID, or sb.Stage.TEST
+
+        Returns
+        -------
+        loss: torch.Tensor
+            the loss value
+        """
+        inputs, targets, num_items, labels, wavs, spk_embs, spk_ids = batch
+        text_padded, input_lengths, _, max_len, output_lengths = inputs
+
+        # Speaker embedding input to compute speaker consistency loss - WIP
+        spk_emb_input = None
+
+        loss_stats = self.hparams.criterion(
+            predictions,
+            targets,
+            input_lengths,
+            output_lengths,
+            spk_emb_input,
+            self.last_epoch,
+        )
+        self.last_loss_stats[stage] = scalarize(loss_stats)
+        return loss_stats.loss
+
+    def _remember_sample(self, batch, predictions):
+        """Remembers samples of spectrograms and the batch for logging purposes
+
+        Arguments
+        ---------
+        batch: tuple
+            a training batch
+        predictions: tuple
+            predictions (raw output of the Tacotron model)
+        """
+        inputs, targets, num_items, labels, wavs, spk_embs, spk_ids = batch
+        text_padded, input_lengths, _, max_len, output_lengths = inputs
+        mel_target, _ = targets
+        (
+            mel_out,
+            mel_out_postnet,
+            gate_out,
+            alignments,
+            pred_mel_lengths,
+        ) = predictions
+        alignments_max = (
+            alignments[0]
+            .max(dim=-1)
+            .values.max(dim=-1)
+            .values.unsqueeze(-1)
+            .unsqueeze(-1)
+        )
+        alignments_output = alignments[0].T.flip(dims=(1,)) / alignments_max
+        self.hparams.progress_sample_logger.remember(
+            target=self._get_spectrogram_sample(mel_target),
+            output=self._get_spectrogram_sample(mel_out),
+            output_postnet=self._get_spectrogram_sample(mel_out_postnet),
+            alignments=alignments_output,
+            raw_batch=self.hparams.progress_sample_logger.get_batch_sample(
+                {
+                    "text_padded": text_padded,
+                    "input_lengths": input_lengths,
+                    "mel_target": mel_target,
+                    "mel_out": mel_out,
+                    "mel_out_postnet": mel_out_postnet,
+                    "max_len": max_len,
+                    "output_lengths": output_lengths,
+                    "gate_out": gate_out,
+                    "alignments": alignments,
+                    "labels": labels,
+                    "wavs": wavs,
+                    "spk_embs": spk_embs,
+                    "spk_ids": spk_ids,
+                }
+            ),
+        )
+
+    def batch_to_device(self, batch):
+        """Transfers the batch to the target device
+
+        Arguments
+        ---------
+        batch: tuple
+            the batch to use
+
+        Returns
+        -------
+        batch: tuple
+            the batch on the correct device
+        """
+        (
+            text_padded,
+            input_lengths,
+            mel_padded,
+            gate_padded,
+            output_lengths,
+            len_x,
+            labels,
+            wavs,
+            spk_embs,
+            spk_ids,
+        ) = batch
+        text_padded = text_padded.to(self.device, non_blocking=True).long()
+        input_lengths = input_lengths.to(self.device, non_blocking=True).long()
+        max_len = torch.max(input_lengths.data).item()
+        mel_padded = mel_padded.to(self.device, non_blocking=True).float()
+        gate_padded = gate_padded.to(self.device, non_blocking=True).float()
+
+        output_lengths = output_lengths.to(
+            self.device, non_blocking=True
+        ).long()
+        x = (text_padded, input_lengths, mel_padded, max_len, output_lengths)
+        y = (mel_padded, gate_padded)
+        len_x = torch.sum(output_lengths)
+        spk_embs = spk_embs.to(self.device, non_blocking=True).float()
+        return (x, y, len_x, labels, wavs, spk_embs, spk_ids)
+
+    def _get_spectrogram_sample(self, raw):
+        """Converts a raw spectrogram to one that can be saved as an image
+        sample  = sqrt(exp(raw))
+
+        Arguments
+        ---------
+        raw: torch.Tensor
+            the raw spectrogram (as used in the model)
+
+        Returns
+        -------
+        sample: torch.Tensor
+            the spectrogram, for image saving purposes
+        """
+        sample = raw[0]
+        return torch.sqrt(torch.exp(sample))
+
+    def on_stage_end(self, stage, stage_loss, epoch):
+        """Gets called at the end of an epoch
 
         Arguments
         ---------
@@ -110,203 +278,275 @@ class EmoIdBrain(sb.Brain):
             `None` during the test stage.
         """
 
-        # Store the train loss until the validation stage.
-        if stage == sb.Stage.TRAIN:
-            self.train_loss = stage_loss
+        # Logs training samples every 10 epochs
+        if stage == sb.Stage.TRAIN and (
+            self.hparams.epoch_counter.current % 10 == 0
+        ):
+            if self.last_batch is None:
+                return
 
-        # Summarize the statistics from the stage for record-keeping.
-        else:
-            stats = {
-                "loss": stage_loss,
-                "error": self.error_metrics.summarize("average"),
-            }
+            train_sample_path = os.path.join(
+                self.hparams.progress_sample_path,
+                str(self.hparams.epoch_counter.current),
+            )
+            if not os.path.exists(train_sample_path):
+                os.makedirs(train_sample_path)
 
-        # At the end of validation...
-        if stage == sb.Stage.VALID:
+            _, targets, _, labels, wavs, spk_embs, spk_ids = self.last_batch
 
-            old_lr, new_lr = self.hparams.lr_annealing(epoch)
-            sb.nnet.schedulers.update_learning_rate(self.optimizer, new_lr)
+            train_sample_text = os.path.join(
+                self.hparams.progress_sample_path,
+                str(self.hparams.epoch_counter.current),
+                "train_input_text.txt",
+            )
+            with open(train_sample_text, "w") as f:
+                f.write(labels[0])
 
-            # The train_logger writes a summary to stdout and to the logfile.
-            self.hparams.train_logger.log_stats(
-                {"Epoch": epoch, "lr": old_lr},
-                train_stats={"loss": self.train_loss},
-                valid_stats=stats,
+            train_input_audio = os.path.join(
+                self.hparams.progress_sample_path,
+                str(self.hparams.epoch_counter.current),
+                "train_input_audio.wav",
+            )
+            torchaudio.save(
+                train_input_audio,
+                sb.dataio.dataio.read_audio(wavs[0]).unsqueeze(0),
+                self.hparams.sample_rate,
             )
 
-            # Save the current checkpoint and delete previous checkpoints,
-            self.checkpointer.save_and_keep_only(meta=stats, min_keys=["error"])
+            _, mel_out_postnet, _, _, pred_mel_lengths = self.last_preds
 
-        # We also write statistics about test data to stdout and to logfile.
+            if self.hparams.log_audio_samples:
+                waveform_ss = self.vocoder.decode_batch(mel_out_postnet[0])
+                train_sample_audio = os.path.join(
+                    self.hparams.progress_sample_path,
+                    str(self.hparams.epoch_counter.current),
+                    "train_output_audio.wav",
+                )
+                torchaudio.save(
+                    train_sample_audio,
+                    waveform_ss.squeeze(1).cpu(),
+                    self.hparams.sample_rate,
+                )
+
+            if self.hparams.use_tensorboard:
+                self.tensorboard_logger.log_audio(
+                    f"{stage}/train_audio_target",
+                    sb.dataio.dataio.read_audio(wavs[0]).unsqueeze(0),
+                    self.hparams.sample_rate,
+                )
+                if self.hparams.log_audio_samples:
+                    self.tensorboard_logger.log_audio(
+                        f"{stage}/train_audio_pred",
+                        waveform_ss.squeeze(1),
+                        self.hparams.sample_rate,
+                    )
+                try:
+                    self.tensorboard_logger.log_figure(
+                        f"{stage}/train_mel_target", targets[0][0]
+                    )
+                    self.tensorboard_logger.log_figure(
+                        f"{stage}/train_mel_pred", mel_out_postnet[0]
+                    )
+                except Exception:
+                    # This is to avoid the code from crashing in case of a mel-spectrogram with one frame
+                    pass
+
+        # At the end of validation, we can write
+        if stage == sb.Stage.VALID:
+            # Update learning rate
+            lr = self.optimizer.param_groups[-1]["lr"]
+            self.last_epoch = epoch
+
+            # The train_logger writes a summary to stdout and to the logfile.
+            self.hparams.train_logger.log_stats(  # 1#2#
+                stats_meta={"Epoch": epoch, "lr": lr},
+                train_stats=self.last_loss_stats[sb.Stage.TRAIN],
+                valid_stats=self.last_loss_stats[sb.Stage.VALID],
+            )
+
+            # The tensorboard_logger writes a summary to stdout and to the logfile.
+            if self.hparams.use_tensorboard:
+                self.tensorboard_logger.log_stats(
+                    stats_meta={"Epoch": epoch, "lr": lr},
+                    train_stats=self.last_loss_stats[sb.Stage.TRAIN],
+                    valid_stats=self.last_loss_stats[sb.Stage.VALID],
+                )
+
+            # Save the current checkpoint and delete previous checkpoints.
+            epoch_metadata = {
+                **{"epoch": epoch},
+                **self.last_loss_stats[sb.Stage.VALID],
+            }
+            self.checkpointer.save_and_keep_only(
+                meta=epoch_metadata,
+                min_keys=["loss"],
+                ckpt_predicate=(
+                    lambda ckpt: (
+                        ckpt.meta["epoch"]
+                        % self.hparams.keep_checkpoint_interval
+                        != 0
+                    )
+                )
+                if self.hparams.keep_checkpoint_interval is not None
+                else None,
+            )
+            output_progress_sample = (
+                self.hparams.progress_samples
+                and epoch % self.hparams.progress_samples_interval == 0
+            )
+            if output_progress_sample:
+                self.run_inference_sample(sb.Stage.VALID)
+                self.hparams.progress_sample_logger.save(epoch)
+
+        # We also write statistics about test data to stdout and to the logfile.
         if stage == sb.Stage.TEST:
             self.hparams.train_logger.log_stats(
                 {"Epoch loaded": self.hparams.epoch_counter.current},
-                test_stats=stats,
+                test_stats=self.last_loss_stats[sb.Stage.TEST],
+            )
+            if self.hparams.use_tensorboard:
+                self.tensorboard_logger.log_stats(
+                    {"Epoch loaded": self.hparams.epoch_counter.current},
+                    test_stats=self.last_loss_stats[sb.Stage.TEST],
+                )
+            if self.hparams.progress_samples:
+                self.run_inference_sample(sb.Stage.TEST)
+                self.hparams.progress_sample_logger.save("test")
+
+    def run_inference_sample(self, stage):
+        """Produces a sample in inference mode. This is called when producing
+        samples and can be useful because"""
+
+        if self.last_batch is None:
+            return
+        inputs, targets, _, labels, wavs, spk_embs, spk_ids = self.last_batch
+        text_padded, input_lengths, _, _, _ = inputs
+
+        mel_out, _, _ = self.hparams.model.infer(
+            text_padded[:1], spk_embs[:1], input_lengths[:1]
+        )
+        self.hparams.progress_sample_logger.remember(
+            inference_mel_out=self._get_spectrogram_sample(mel_out)
+        )
+
+        if stage == sb.Stage.VALID:
+            inf_sample_path = os.path.join(
+                self.hparams.progress_sample_path,
+                str(self.hparams.epoch_counter.current),
             )
 
-    def output_predictions_test_set(
-        self,
-        test_set,
-        max_key=None,
-        min_key=None,
-        progressbar=None,
-        test_loader_kwargs={},
-    ):
-        """Iterate test_set and create output file (id, predictions, true values).
+            if not os.path.exists(inf_sample_path):
+                os.makedirs(inf_sample_path)
 
-        Arguments
-        ---------
-        test_set : Dataset, DataLoader
-            If a DataLoader is given, it is iterated directly. Otherwise passed
-            to ``self.make_dataloader()``.
-        max_key : str
-            Key to use for finding best checkpoint, passed to
-            ``on_evaluate_start()``.
-        min_key : str
-            Key to use for finding best checkpoint, passed to
-            ``on_evaluate_start()``.
-        progressbar : bool
-            Whether to display the progress in a progressbar.
-        test_loader_kwargs : dict
-            Kwargs passed to ``make_dataloader()`` if ``test_set`` is not a
-            DataLoader. NOTE: ``loader_kwargs["ckpt_prefix"]`` gets
-            automatically overwritten to ``None`` (so that the test DataLoader
-            is not added to the checkpointer).
-        """
-        if progressbar is None:
-            progressbar = not self.noprogressbar
+            inf_sample_text = os.path.join(
+                self.hparams.progress_sample_path,
+                str(self.hparams.epoch_counter.current),
+                "inf_input_text.txt",
+            )
+            with open(inf_sample_text, "w") as f:
+                f.write(labels[0])
 
-        if not isinstance(test_set, DataLoader):
-            test_loader_kwargs["ckpt_prefix"] = None
-            test_set = self.make_dataloader(
-                test_set, Stage.TEST, **test_loader_kwargs
+            inf_input_audio = os.path.join(
+                self.hparams.progress_sample_path,
+                str(self.hparams.epoch_counter.current),
+                "inf_input_audio.wav",
+            )
+            torchaudio.save(
+                inf_input_audio,
+                sb.dataio.dataio.read_audio(wavs[0]).unsqueeze(0),
+                self.hparams.sample_rate,
             )
 
-            save_file = os.path.join(
-                self.hparams.output_folder, "predictions.csv"
-            )
-            with open(save_file, "w", newline="") as csvfile:
-                outwriter = csv.writer(csvfile, delimiter=",")
-                outwriter.writerow(["id", "prediction", "true_value"])
-
-        self.on_evaluate_start(max_key=max_key, min_key=min_key)  # done before
-        self.modules.eval()
-        with torch.no_grad():
-            for batch in tqdm(
-                test_set, dynamic_ncols=True, disable=not progressbar
-            ):
-                self.step += 1
-
-                emo_ids = batch.id
-                true_vals = batch.emo_encoded.data.squeeze(dim=1).tolist()
-                output = self.compute_forward(batch, stage=Stage.TEST)
-                predictions = (
-                    torch.argmax(output, dim=-1).squeeze(dim=1).tolist()
+            if self.hparams.log_audio_samples:
+                waveform_ss = self.vocoder.decode_batch(mel_out)
+                inf_sample_audio = os.path.join(
+                    self.hparams.progress_sample_path,
+                    str(self.hparams.epoch_counter.current),
+                    "inf_output_audio.wav",
+                )
+                torchaudio.save(
+                    inf_sample_audio,
+                    waveform_ss.squeeze(1).cpu(),
+                    self.hparams.sample_rate,
                 )
 
-                with open(save_file, "a", newline="") as csvfile:
-                    outwriter = csv.writer(csvfile, delimiter=",")
-                    for emo_id, prediction, true_val in zip(
-                        emo_ids, predictions, true_vals
-                    ):
-                        outwriter.writerow([emo_id, prediction, true_val])
+            if self.hparams.use_tensorboard:
+                self.tensorboard_logger.log_audio(
+                    f"{stage}/inf_audio_target",
+                    sb.dataio.dataio.read_audio(wavs[0]).unsqueeze(0),
+                    self.hparams.sample_rate,
+                )
+                if self.hparams.log_audio_samples:
+                    self.tensorboard_logger.log_audio(
+                        f"{stage}/inf_audio_pred",
+                        waveform_ss.squeeze(1),
+                        self.hparams.sample_rate,
+                    )
+                try:
+                    self.tensorboard_logger.log_figure(
+                        f"{stage}/inf_mel_target", targets[0][0]
+                    )
+                    self.tensorboard_logger.log_figure(
+                        f"{stage}/inf_mel_pred", mel_out
+                    )
+                except Exception:
+                    # This is to avoid the code from crashing in case of a mel-spectrogram with one frame
+                    pass
 
-                # Debug mode only runs a few batches
-                if self.debug and self.step == self.debug_batches:
-                    break
-        self.step = 0
 
+def dataio_prepare(hparams):
+    # Define audio pipeline:
 
-class Stage(Enum):
-    """Simple enum to track stage of experiments."""
+    @sb.utils.data_pipeline.takes("wav", "label_phoneme")
+    @sb.utils.data_pipeline.provides("mel_text_pair")
+    def audio_pipeline(wav, label_phoneme):
 
-    TRAIN = auto()
-    VALID = auto()
-    TEST = auto()
+        label_phoneme = "{" + label_phoneme + "}"
 
+        text_seq = torch.IntTensor(
+            text_to_sequence(label_phoneme, hparams["text_cleaners"])
+        )
 
-def dataio_prep(hparams):
-    """This function prepares the datasets to be used in the brain class.
-    It also defines the data processing pipeline through user-defined
-    functions. We expect `prepare_mini_librispeech` to have been called before
-    this, so that the `train.json`, `valid.json`,  and `valid.json` manifest
-    files are available.
+        audio, sig_sr = torchaudio.load(wav)
+        if sig_sr != hparams["sample_rate"]:
+            audio = torchaudio.functional.resample(
+                audio, sig_sr, hparams["sample_rate"]
+            )
 
-    Arguments
-    ---------
-    hparams : dict
-        This dictionary is loaded from the `train.yaml` file, and it includes
-        all the hyperparameters needed for dataset construction and loading.
+        mel = hparams["mel_spectogram"](audio=audio.squeeze())
 
-    Returns
-    -------
-    datasets : dict
-        Contains two keys, "train" and "valid" that correspond
-        to the appropriate DynamicItemDataset object.
-    """
+        len_text = len(text_seq)
 
-    # Define audio pipeline
-    @sb.utils.data_pipeline.takes("wav")
-    @sb.utils.data_pipeline.provides("sig")
-    def audio_pipeline(wav):
-        """Load the signal, and pass it and its length to the corruption class.
-        This is done on the CPU in the `collate_fn`."""
-        sig = sb.dataio.dataio.read_audio(wav)
-        return sig
+        return text_seq, mel, len_text
 
-    # Initialization of the label encoder. The label encoder assignes to each
-    # of the observed label a unique index (e.g, 'spk01': 0, 'spk02': 1, ..)
-    label_encoder = sb.dataio.encoder.CategoricalEncoder()
-
-    # Define label pipeline:
-    @sb.utils.data_pipeline.takes("emo")
-    @sb.utils.data_pipeline.provides("emo", "emo_encoded")
-    def label_pipeline(emo):
-        yield emo
-        emo_encoded = label_encoder.encode_label_torch(emo)
-        yield emo_encoded
-
-    # Define datasets. We also connect the dataset with the data processing
-    # functions defined above.
     datasets = {}
     data_info = {
-        "train": hparams["train_annotation"],
-        "valid": hparams["valid_annotation"],
-        "test": hparams["test_annotation"],
+        "train": hparams["train_json"],
+        "valid": hparams["valid_json"],
+        "test": hparams["test_json"],
     }
-    for dataset in data_info:
+    for dataset in hparams["splits"]:
         datasets[dataset] = sb.dataio.dataset.DynamicItemDataset.from_json(
             json_path=data_info[dataset],
             replacements={"data_root": hparams["data_folder"]},
-            dynamic_items=[audio_pipeline, label_pipeline],
-            output_keys=["id", "sig", "emo_encoded"],
+            dynamic_items=[audio_pipeline],
+            output_keys=["mel_text_pair", "wav", "label", "uttid"],
         )
-    # Load or compute the label encoder (with multi-GPU DDP support)
-    # Please, take a look into the lab_enc_file to see the label to index
-    # mappinng.
-
-    lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
-    label_encoder.load_or_create(
-        path=lab_enc_file,
-        from_didatasets=[datasets["train"]],
-        output_key="emo",
-    )
 
     return datasets
 
 
-# RECIPE BEGINS!
 if __name__ == "__main__":
 
-    # Reading command line arguments.
+    # Load hyperparameters file with command-line overrides
     hparams_file, run_opts, overrides = sb.parse_arguments(sys.argv[1:])
 
-    # Initialize ddp (useful only for multi-GPU DDP training).
-    sb.utils.distributed.ddp_init_group(run_opts)
-
-    # Load hyperparameters file with command-line overrides.
     with open(hparams_file) as fin:
         hparams = load_hyperpyyaml(fin, overrides)
+
+    # If --distributed_launch then
+    # create ddp_group with the right communication protocol
+    sb.utils.distributed.ddp_init_group(run_opts)
 
     # Create experiment directory
     sb.create_experiment_directory(
@@ -315,29 +555,72 @@ if __name__ == "__main__":
         overrides=overrides,
     )
 
-    from iemocap_prepare import prepare_data  # noqa E402
+    print(f"TRAIN {hparams['train_json']}")
 
-    # Data preparation, to be run on only one process.
+    # Prepare data
     if not hparams["skip_prep"]:
+        sys.path.append("../../")
+        from iemocap_prepare import prepare_iemocap
+
         sb.utils.distributed.run_on_main(
-            prepare_data,
+            prepare_iemocap,
             kwargs={
                 "data_original": hparams["data_folder"],
-                "save_json_train": hparams["train_annotation"],
-                "save_json_valid": hparams["valid_annotation"],
-                "save_json_test": hparams["test_annotation"],
-                "split_ratio": hparams["split_ratio"],
-                "different_speakers": hparams["different_speakers"],
-                "test_spk_id": hparams["test_spk_id"],
+                "save_json_train": hparams["train_json"],
+                "save_json_valid": hparams["valid_json"],
+                "save_json_test": hparams["test_json"],
+                # "sample_rate": hparams["sample_rate"],
+                # "train_split": hparams["train_split"],
+                # "valid_split": hparams["valid_split"],
+                # "test_split": hparams["test_split"],
                 "seed": hparams["seed"],
+                # "model_name": hparams["model"].__class__.__name__,
             },
         )
 
-    # Create dataset objects "train", "valid", and "test".
-    datasets = dataio_prep(hparams)
+    from compute_speaker_embeddings import compute_speaker_embeddings
 
-    # Initialize the Brain object to prepare for mask training.
-    emo_id_brain = EmoIdBrain(
+    sb.utils.distributed.run_on_main(
+        compute_speaker_embeddings,
+        kwargs={
+            "input_filepaths": [
+                hparams["train_json"],
+                hparams["valid_json"],
+                hparams["test_json"],
+            ],
+            "output_file_paths": [
+                hparams["train_speaker_embeddings_pickle"],
+                hparams["valid_speaker_embeddings_pickle"],
+                hparams["test_speaker_embeddings_pickle"],
+            ],
+            "data_folder": hparams["data_folder"],
+            "spk_emb_encoder_path": hparams["spk_emb_encoder"],
+            "spk_emb_sr": hparams["spk_emb_sample_rate"],
+            "mel_spec_params": {
+                "custom_mel_spec_encoder": hparams["custom_mel_spec_encoder"],
+                "sample_rate": hparams["spk_emb_sample_rate"],
+                "hop_length": hparams["hop_length"],
+                "win_length": hparams["win_length"],
+                "n_mel_channels": hparams["n_mel_channels"],
+                "n_fft": hparams["n_fft"],
+                "mel_fmin": hparams["mel_fmin"],
+                "mel_fmax": hparams["mel_fmax"],
+                "mel_normalized": hparams["mel_normalized"],
+                "power": hparams["power"],
+                "norm": hparams["norm"],
+                "mel_scale": hparams["mel_scale"],
+                "dynamic_range_compression": hparams[
+                    "dynamic_range_compression"
+                ],
+            },
+            "device": run_opts["device"],
+        },
+    )
+
+    datasets = dataio_prepare(hparams)
+
+    # Brain class initialization
+    tacotron2_brain = Tacotron2Brain(
         modules=hparams["modules"],
         opt_class=hparams["opt_class"],
         hparams=hparams,
@@ -345,28 +628,32 @@ if __name__ == "__main__":
         checkpointer=hparams["checkpointer"],
     )
 
-    # The `fit()` method iterates the training loop, calling the methods
-    # necessary to update the parameters of the model. Since all objects
-    # with changing state are managed by the Checkpointer, training can be
-    # stopped at any point, and will be resumed on next call.
-    emo_id_brain.fit(
-        epoch_counter=emo_id_brain.hparams.epoch_counter,
+    # Load pretrained model if pretrained_separator is present in the yaml
+    if "pretrained_separator" in hparams:
+        sb.utils.distributed.run_on_main(
+            hparams["pretrained_separator"].collect_files
+        )
+        hparams["pretrained_separator"].load_collected(
+            device=run_opts["device"]
+        )
+
+    if hparams["use_tensorboard"]:
+        tacotron2_brain.tensorboard_logger = sb.utils.train_logger.TensorboardLogger(
+            save_dir=hparams["output_folder"] + "/tensorboard"
+        )
+
+    # Training
+    tacotron2_brain.fit(
+        tacotron2_brain.hparams.epoch_counter,
         train_set=datasets["train"],
         valid_set=datasets["valid"],
-        train_loader_kwargs=hparams["dataloader_options"],
-        valid_loader_kwargs=hparams["dataloader_options"],
+        train_loader_kwargs=hparams["train_dataloader_opts"],
+        valid_loader_kwargs=hparams["valid_dataloader_opts"],
     )
 
-    # Load the best checkpoint for evaluation
-    test_stats = emo_id_brain.evaluate(
-        test_set=datasets["test"],
-        min_key="error",
-        test_loader_kwargs=hparams["dataloader_options"],
-    )
-
-    # Create output file with predictions
-    emo_id_brain.output_predictions_test_set(
-        test_set=datasets["test"],
-        min_key="error",
-        test_loader_kwargs=hparams["dataloader_options"],
-    )
+    # Test
+    if "test" in datasets:
+        tacotron2_brain.evaluate(
+            datasets["test"],
+            test_loader_kwargs=hparams["test_dataloader_opts"],
+        )

@@ -21,7 +21,7 @@ SAMPLERATE = 16000
 NUMBER_UTT = 5531
 
 
-def prepare_data(
+def prepare_iemocap(
     data_original,
     save_json_train,
     save_json_valid,
@@ -76,11 +76,12 @@ def prepare_data(
     # Create a dictionary that maps speaker id and corresponding wavs (from function)
     speaker_dict = transform_data(data_original)
 
-    # I guess there are 5331 utterances
+    # I guess there are 5331 utterances - CAN REMOVE
     if sum([len(value) for value in speaker_dict.values()]) != NUMBER_UTT:
         raise ValueError(
             "Error: Number of utterances is not 5531, please check your IEMOCAP folder"
         )
+
 
     # List files and create manifest from list
     logger.info(
@@ -111,11 +112,11 @@ def create_json(wav_list, json_file):
     json_file : str
         The path of the output json file
     """
-
     json_dict = {}
     for obj in wav_list:
         wav_file = obj[0]
         emo = obj[1]
+        transcipt = obj[3][21:] # removes the timing from the transcript line
         # Read the signal (to retrieve duration in seconds)
         signal = read_audio(wav_file)
         duration = signal.shape[0] / SAMPLERATE
@@ -127,7 +128,7 @@ def create_json(wav_list, json_file):
             "wav": wav_file,
             "length": duration,
             "emo": emo,
-            # NEED TO ADD TRANSCRIPT HERE
+            "transciption": transcipt,
         }
 
     # Writing the dictionary to the json file
@@ -151,6 +152,7 @@ def skip(*filenames):
     for filename in filenames:
         if not os.path.isfile(filename):
             return False
+        
     return True
 
 
@@ -255,7 +257,7 @@ def transform_data(path_loadSession):
     speaker_dict = {str(i + 1): [] for i in range(10)}
 
     speaker_count = 0
-    for k in range(5):
+    for k in range(5): # THIS USED TO BE 5
         session = load_session("%s%s" % (path_loadSession, k + 1))
         for idx in range(len(session)):
             if session[idx][2] == "F":
@@ -308,6 +310,22 @@ def load_session(pathSession):
     """
     pathEmo = pathSession + "/dialog/EmoEvaluation/"
     pathWavFolder = pathSession + "/sentences/wav/"
+    pathTranscriptions = pathSession + "/dialog/transcriptions"
+
+    # Create a dictionary to store transcriptions by filename
+    transcriptions_dict = {}
+    
+    # Load transcriptions from the text files
+    for txt_file in os.listdir(pathTranscriptions):
+        if txt_file.endswith(".txt"):
+            with open(os.path.join(pathTranscriptions, txt_file), 'r') as f:
+                lines = f.readlines()
+                for line in lines:
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        filename = parts[0]
+                        transcription = " ".join(parts[1:])
+                        transcriptions_dict[filename] = transcription
 
     improvisedUtteranceList = []
     for emoFile in [
@@ -338,10 +356,11 @@ def load_session(pathSession):
 
                 if emoFile[7] != "i" and utterance[2][7] == "s":
                     improvisedUtteranceList.append(
-                        [path, label, utterance[2][18]]
+                        [path, label, utterance[2][18], transcriptions_dict.get(utterance[2], "")]
                     )
                 else:
                     improvisedUtteranceList.append(
-                        [path, label, utterance[2][15]]
+                        [path, label, utterance[2][15], transcriptions_dict.get(utterance[2], "")]
                     )
+    
     return improvisedUtteranceList
