@@ -725,7 +725,7 @@ class TextMelCollate:
             output_lengths[i] = mel.size(1)
             labels.append(raw_batch[idx]["label"])
             wavs.append(raw_batch[idx]["wav"])
-
+            
             spk_emb = speaker_embeddings[raw_batch[idx]["uttid"]]
             spk_embs_list.append(spk_emb)
 

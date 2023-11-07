@@ -62,7 +62,7 @@ def dataio_prep(hparams):
         yield emo
         emo_encoded = label_encoder.encode_label_torch(emo)
         yield emo_encoded
-
+    print("a")
     # Define datasets. We also connect the dataset with the data processing
     # functions defined above.
     datasets = {}
@@ -89,6 +89,7 @@ def dataio_prep(hparams):
         output_key="emo",
     )
 
+    print("b")
     return datasets
 
 

@@ -15,6 +15,7 @@ import json
 import random
 import logging
 from speechbrain.dataio.dataio import read_audio
+from speechbrain.pretrained import GraphemeToPhoneme
 
 logger = logging.getLogger(__name__)
 SAMPLERATE = 16000
@@ -112,8 +113,21 @@ def create_json(wav_list, json_file):
     json_file : str
         The path of the output json file
     """
+    # if model_name == "Tacotron2":
+    print("e")
+    logger.info(
+        "Computing phonemes for labels using SpeechBrain G2P. This may take a while."
+    )
+    print("Computing phonemes for labels using SpeechBrain G2P. This may take a while.")
+    g2p = GraphemeToPhoneme.from_hparams(
+        "speechbrain/soundchoice-g2p", run_opts={"device": "cuda:0"}
+    )
+    print("d")
+        
     json_dict = {}
+    count = 0
     for obj in wav_list:
+        count += 1
         wav_file = obj[0]
         emo = obj[1]
         transcipt = obj[3][21:] # removes the timing from the transcript line
@@ -125,11 +139,32 @@ def create_json(wav_list, json_file):
 
         # Create entry for this utterance
         json_dict[uttid] = {
+            "uttid": uttid,
             "wav": wav_file,
-            "length": duration,
-            "emo": emo,
-            "transciption": transcipt,
+            # "length": duration,
+            # "emo": emo,
+            "label": transcipt,
         }
+        # Tacotron2 specific data preparation
+        # if model_name == "Tacotron2":
+        # Computes phoneme labels using SpeechBrain G2P for Tacotron2
+        label_phoneme_list = g2p(transcipt)
+        label_phoneme = " ".join(label_phoneme_list)
+        json_dict[uttid].update({"label_phoneme": label_phoneme})
+        print(transcript)
+        print(label_phoneme)
+
+        print(count)
+
+        json_phonemes = "phonemes.json"
+        lines_to_append = [transcript, label_phoneme]
+
+        # Open the file in append mode
+        with open(json_phonemes, mode="a") as json_f:
+            for line in lines_to_append:
+                # Append a line and add a newline character
+                json_f.write(line + "\n")
+            json_f.write("\n")
 
     # Writing the dictionary to the json file
     with open(json_file, mode="w") as json_f:

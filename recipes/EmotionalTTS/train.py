@@ -556,6 +556,7 @@ if __name__ == "__main__":
     )
 
     print(f"TRAIN {hparams['train_json']}")
+    print("SKIP PREP IS TRUE")
 
     # Prepare data
     if not hparams["skip_prep"]:
@@ -569,12 +570,12 @@ if __name__ == "__main__":
                 "save_json_train": hparams["train_json"],
                 "save_json_valid": hparams["valid_json"],
                 "save_json_test": hparams["test_json"],
-                # "sample_rate": hparams["sample_rate"],
-                # "train_split": hparams["train_split"],
-                # "valid_split": hparams["valid_split"],
-                # "test_split": hparams["test_split"],
+                "sample_rate": hparams["sample_rate"],
+                "train_split": hparams["train_split"],
+                "valid_split": hparams["valid_split"],
+                "test_split": hparams["test_split"],
                 "seed": hparams["seed"],
-                # "model_name": hparams["model"].__class__.__name__,
+                "model_name": hparams["model"].__class__.__name__,
             },
         )
 
