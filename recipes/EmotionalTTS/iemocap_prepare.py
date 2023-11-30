@@ -126,6 +126,7 @@ def create_json(wav_list, json_file):
         
     json_dict = {}
     count = 0
+    # wav_list = wav_list[0:2] # for debugging (make the files small af)
     for obj in wav_list:
         count += 1
         wav_file = obj[0]

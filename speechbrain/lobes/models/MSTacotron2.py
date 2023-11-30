@@ -207,6 +207,7 @@ class Tacotron2(nn.Module):
         self.n_mel_channels = n_mel_channels
         self.n_frames_per_step = n_frames_per_step
         self.embedding = nn.Embedding(n_symbols, symbols_embedding_dim)
+        self.emo_embedding = nn.Embedding(n_symbols, 192) # THIS LINE
         std = sqrt(2.0 / (n_symbols + symbols_embedding_dim))
         val = sqrt(3.0) * std  # uniform bounds for std
         self.embedding.weight.data.uniform_(-val, val)
@@ -294,7 +295,7 @@ class Tacotron2(nn.Module):
             output_lengths,
         )
 
-    def forward(self, inputs, spk_embs, alignments_dim=None):
+    def forward(self, inputs, spk_embs, emo, alignments_dim=None): # THIS LINE
         """Decoder forward pass for training
 
         Arguments
@@ -320,8 +321,24 @@ class Tacotron2(nn.Module):
         output_legnths: torch.Tensor
             length of the output without padding
         """
+        print("IN MSTACOTRON2 FORWARD")
         inputs, input_lengths, targets, max_len, output_lengths = inputs
         input_lengths, output_lengths = input_lengths.data, output_lengths.data
+
+        emo_indices = torch.tensor([{'hap': 0, 'sad': 1, 'ang': 2, 'neu': 3}[e] for e in emo]).to(inputs.device)
+        emo_embeddings = self.emo_embedding(emo_indices)
+        # print(emo_embeddings.shape)
+        # print(inputs.shape)
+        # print(input_lengths)
+        # print(targets.shape)
+        # print(max_len)
+        # print(output_lengths)
+        # exit()
+
+        # print(f"EMO {emo}")
+        # print(f"INDICES {emo_indices}")
+        # print(f"EMBEDDINGS {emo_embeddings}")
+        # exit()
 
         embedded_inputs = self.embedding(inputs).transpose(1, 2)
         encoder_outputs = self.encoder(embedded_inputs, input_lengths)
@@ -341,6 +358,14 @@ class Tacotron2(nn.Module):
         )
         encoder_outputs = encoder_outputs + spk_embs_g
 
+        # Inject emotion embeddings into the encoder output
+        emo_shared = F.relu(self.ms_film_hidden(emo_embeddings))
+        emo_embs_h = self.ms_film_h(emo_shared)
+        emo_embs_h = torch.unsqueeze(emo_embs_h, 1).repeat(
+            1, encoder_outputs.shape[1], 1
+        )
+        encoder_outputs = encoder_outputs + emo_embs_h
+
         # Pass the encoder output combined with speaker embeddings to the next layers
         mel_outputs, gate_outputs, alignments = self.decoder(
             encoder_outputs, targets, memory_lengths=input_lengths
@@ -355,7 +380,7 @@ class Tacotron2(nn.Module):
             alignments_dim,
         )
 
-    def infer(self, inputs, spk_embs, input_lengths):
+    def infer(self, inputs, spk_embs, input_lengths, emo): # THIS LINE
         """Produces outputs
 
 
@@ -377,6 +402,8 @@ class Tacotron2(nn.Module):
         alignments: torch.Tensor
             sequence of attention weights
         """
+        emo_indices = torch.tensor([{'hap': 0, 'sad': 1, 'ang': 2, 'neu': 3}[e] for e in emo]).to(inputs.device)
+        emo_embeddings = self.emo_embedding(emo_indices)
 
         embedded_inputs = self.embedding(inputs).transpose(1, 2)
         encoder_outputs = self.encoder.infer(embedded_inputs, input_lengths)
@@ -395,6 +422,14 @@ class Tacotron2(nn.Module):
             1, encoder_outputs.shape[1], 1
         )
         encoder_outputs = encoder_outputs + spk_embs_g
+
+        # Inject emotion embeddings into the encoder output
+        emo_shared = F.relu(self.ms_film_hidden(emo_embeddings))
+        emo_embs_h = self.ms_film_h(emo_shared)
+        emo_embs_h = torch.unsqueeze(emo_embs_h, 1).repeat(
+            1, encoder_outputs.shape[1], 1
+        )
+        encoder_outputs = encoder_outputs + emo_embs_h
 
         # Pass the encoder output combined with speaker embeddings to the next layers
         mel_outputs, gate_outputs, alignments, mel_lengths = self.decoder.infer(
@@ -475,6 +510,7 @@ class Loss(nn.Module):
         guided_attention_hard_stop=None,
     ):
         super().__init__()
+        print("MSTACOTRON2 INIT")
         if guided_attention_weight == 0:
             guided_attention_weight = None
         self.guided_attention_weight = guided_attention_weight
@@ -528,6 +564,7 @@ class Loss(nn.Module):
         result: LossStats
             the total loss - and individual losses (mel and gate)
         """
+        print("loss forward pass")
         mel_target, gate_target = targets[0], targets[1]
         mel_target.requires_grad = False
         gate_target.requires_grad = False
@@ -611,6 +648,7 @@ class Loss(nn.Module):
         attn_loss: torch.Tensor
             the attention loss value
         """
+        print("got attention loss")
         zero_tensor = torch.tensor(0.0, device=alignments.device)
         if (
             self.guided_attention_weight is None
@@ -666,6 +704,7 @@ class TextMelCollate:
     ):
         self.n_frames_per_step = n_frames_per_step
         self.speaker_embeddings_pickle = speaker_embeddings_pickle
+        print("MSTACOTRON2 TextMelCollate INIT HERE")
 
     # TODO: Make this more intuitive, use the pipeline
     def __call__(self, batch):
@@ -675,13 +714,16 @@ class TextMelCollate:
         batch: list
             [text_normalized, mel_normalized]
         """
-
+        print("TextMelCollate CALL HERE")
         # TODO: Remove for loops and this dirty hack
         raw_batch = list(batch)
         for i in range(
             len(batch)
         ):  # the pipline return a dictionary wiht one elemnent
             batch[i] = batch[i]["mel_text_pair"]
+            # print(f"THIS IS BATCH: {batch[i]}")
+
+        print("BATCH HAS BEEN PRINTED (not anymore but would've)")
 
         # Right zero-pad all one-hot text sequences to max input length
 
@@ -711,12 +753,12 @@ class TextMelCollate:
         gate_padded = torch.FloatTensor(len(batch), max_target_len)
         gate_padded.zero_()
         output_lengths = torch.LongTensor(len(batch))
-        labels, wavs, spk_embs_list, spk_ids = [], [], [], []
+        labels, wavs, spk_embs_list, spk_ids, emo = [], [], [], [], [] # THIS LINE
         with open(
             self.speaker_embeddings_pickle, "rb"
         ) as speaker_embeddings_file:
             speaker_embeddings = pickle.load(speaker_embeddings_file)
-
+        # print(speaker_embeddings)
         for i in range(len(ids_sorted_decreasing)):
             idx = ids_sorted_decreasing[i]
             mel = batch[idx][1]
@@ -725,11 +767,15 @@ class TextMelCollate:
             output_lengths[i] = mel.size(1)
             labels.append(raw_batch[idx]["label"])
             wavs.append(raw_batch[idx]["wav"])
-            
+            emo.append(raw_batch[idx]["emo"]) # THIS LINE
+            # print("THIS IS THE RAW BATCH")
+            # print(len(raw_batch))
             spk_emb = speaker_embeddings[raw_batch[idx]["uttid"]]
             spk_embs_list.append(spk_emb)
 
             spk_ids.append(raw_batch[idx]["uttid"].split("_")[0])
+            
+        print(emo)
 
         spk_embs = torch.stack(spk_embs_list)
 
@@ -747,4 +793,5 @@ class TextMelCollate:
             wavs,
             spk_embs,
             spk_ids,
+            emo # THIS LINE
         )

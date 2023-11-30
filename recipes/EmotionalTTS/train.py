@@ -11,6 +11,7 @@
  * Artem Ploujnikov 2021
  * Yingzhi Wang 2022
  * Pradnya Kandarkar 2023
+ * Eli Samuel 2023
 """
 import torch
 import speechbrain as sb
@@ -30,9 +31,11 @@ logger = logging.getLogger(__name__)
 class Tacotron2Brain(sb.Brain):
     """The Brain implementation for Tacotron2"""
 
-    def on_fit_start(self):
+    def on_fit_start(self): # THIS FUNCTION IS FINE UNCHANGED I THINK?
         """Gets called at the beginning of ``fit()``, on multiple processes
         if ``distributed_count > 0`` and backend is ddp and initializes statistics"""
+
+        print("BBBBBBBBBBBBBB")
         self.hparams.progress_sample_logger.reset()
         self.last_epoch = 0
         self.last_batch = None
@@ -48,6 +51,7 @@ class Tacotron2Brain(sb.Brain):
             )
 
         self.last_loss_stats = {}
+        print("DDDDDDDDDDDDDDD")
         return super().on_fit_start()
 
     def compute_forward(self, batch, stage):
@@ -64,18 +68,21 @@ class Tacotron2Brain(sb.Brain):
         -------
         the model output
         """
+        print("COMPUTING FORWARD PASS")
         effective_batch = self.batch_to_device(batch)
-        inputs, y, num_items, _, _, spk_embs, spk_ids = effective_batch
+        inputs, y, num_items, _, _, spk_embs, spk_ids, emo = effective_batch
+
+        print(f"EMOOOOOOOO: {emo}")
 
         _, input_lengths, _, _, _ = inputs
 
         max_input_length = input_lengths.max().item()
 
         return self.modules.model(
-            inputs, spk_embs, alignments_dim=max_input_length
+            inputs, spk_embs, emo, alignments_dim=max_input_length # THIS LINE
         )
 
-    def fit_batch(self, batch):
+    def fit_batch(self, batch): # THIS FUNCTION IS FINE UNCHANGED I THINK?
         """Fits a single batch and applies annealing
 
         Arguments
@@ -88,11 +95,12 @@ class Tacotron2Brain(sb.Brain):
         loss: torch.Tensor
             detached loss
         """
+        print("FITTING BATCH")
         result = super().fit_batch(batch)
         self.hparams.lr_annealing(self.optimizer)
         return result
 
-    def compute_objectives(self, predictions, batch, stage):
+    def compute_objectives(self, predictions, batch, stage): # THIS FUNCTION IS FINE UNCHANGED I THINK?
         """Computes the loss given the predicted and targeted outputs
 
         Arguments
@@ -109,6 +117,7 @@ class Tacotron2Brain(sb.Brain):
         loss : torch.Tensor
             A one-element tensor used for backpropagating the gradient
         """
+        print("COMPUTING EFFECTIVE BATCH")
         effective_batch = self.batch_to_device(batch)
         # Hold on to the batch for the inference sample.
         # This is needed because the infernece sample is run from on_stage_end only,
@@ -138,7 +147,14 @@ class Tacotron2Brain(sb.Brain):
         loss: torch.Tensor
             the loss value
         """
-        inputs, targets, num_items, labels, wavs, spk_embs, spk_ids = batch
+        print("=========================================")
+        print(f"COMPUTING LOSS for stage {stage}")
+        print(f"COMPUTING LOSS for stage {stage}")
+        print(f"COMPUTING LOSS for stage {stage}")
+        print(f"COMPUTING LOSS for stage {stage}")
+        print("=========================================")
+
+        inputs, targets, num_items, labels, wavs, spk_embs, spk_ids, emo = batch # THIS LINE
         text_padded, input_lengths, _, max_len, output_lengths = inputs
 
         # Speaker embedding input to compute speaker consistency loss - WIP
@@ -153,6 +169,7 @@ class Tacotron2Brain(sb.Brain):
             self.last_epoch,
         )
         self.last_loss_stats[stage] = scalarize(loss_stats)
+        print(f"THIS IS THE LOSS STATS: {self.last_loss_stats}")
         return loss_stats.loss
 
     def _remember_sample(self, batch, predictions):
@@ -165,7 +182,8 @@ class Tacotron2Brain(sb.Brain):
         predictions: tuple
             predictions (raw output of the Tacotron model)
         """
-        inputs, targets, num_items, labels, wavs, spk_embs, spk_ids = batch
+        print("remembering sample")
+        inputs, targets, num_items, labels, wavs, spk_embs, spk_ids, emo = batch # THIS LINE
         text_padded, input_lengths, _, max_len, output_lengths = inputs
         mel_target, _ = targets
         (
@@ -203,6 +221,7 @@ class Tacotron2Brain(sb.Brain):
                     "wavs": wavs,
                     "spk_embs": spk_embs,
                     "spk_ids": spk_ids,
+                    "emo": emo, # THIS LINE
                 }
             ),
         )
@@ -220,6 +239,7 @@ class Tacotron2Brain(sb.Brain):
         batch: tuple
             the batch on the correct device
         """
+        print("batching to device")
         (
             text_padded,
             input_lengths,
@@ -231,6 +251,7 @@ class Tacotron2Brain(sb.Brain):
             wavs,
             spk_embs,
             spk_ids,
+            emo # THIS LINE
         ) = batch
         text_padded = text_padded.to(self.device, non_blocking=True).long()
         input_lengths = input_lengths.to(self.device, non_blocking=True).long()
@@ -245,9 +266,11 @@ class Tacotron2Brain(sb.Brain):
         y = (mel_padded, gate_padded)
         len_x = torch.sum(output_lengths)
         spk_embs = spk_embs.to(self.device, non_blocking=True).float()
-        return (x, y, len_x, labels, wavs, spk_embs, spk_ids)
+        print(emo)
 
-    def _get_spectrogram_sample(self, raw):
+        return (x, y, len_x, labels, wavs, spk_embs, spk_ids, emo)
+
+    def _get_spectrogram_sample(self, raw): # THIS FUNCTION IS FINE UNCHANGED I THINK?
         """Converts a raw spectrogram to one that can be saved as an image
         sample  = sqrt(exp(raw))
 
@@ -277,6 +300,7 @@ class Tacotron2Brain(sb.Brain):
             The currently-starting epoch. This is passed
             `None` during the test stage.
         """
+        print(f"THIS IS THE CURRENT STAGE: {stage}")
 
         # Logs training samples every 10 epochs
         if stage == sb.Stage.TRAIN and (
@@ -292,7 +316,7 @@ class Tacotron2Brain(sb.Brain):
             if not os.path.exists(train_sample_path):
                 os.makedirs(train_sample_path)
 
-            _, targets, _, labels, wavs, spk_embs, spk_ids = self.last_batch
+            _, targets, _, labels, wavs, spk_embs, spk_ids, emo = self.last_batch # THIS LINE
 
             train_sample_text = os.path.join(
                 self.hparams.progress_sample_path,
@@ -307,6 +331,7 @@ class Tacotron2Brain(sb.Brain):
                 str(self.hparams.epoch_counter.current),
                 "train_input_audio.wav",
             )
+            
             torchaudio.save(
                 train_input_audio,
                 sb.dataio.dataio.read_audio(wavs[0]).unsqueeze(0),
@@ -353,6 +378,7 @@ class Tacotron2Brain(sb.Brain):
 
         # At the end of validation, we can write
         if stage == sb.Stage.VALID:
+            print(f"LAST LOSS STATS FOR VALID: {self.last_loss_stats}")
             # Update learning rate
             lr = self.optimizer.param_groups[-1]["lr"]
             self.last_epoch = epoch
@@ -443,17 +469,21 @@ class Tacotron2Brain(sb.Brain):
                 str(self.hparams.epoch_counter.current),
                 "inf_input_text.txt",
             )
+
             with open(inf_sample_text, "w") as f:
                 f.write(labels[0])
+                # f.write("Yeah but you weren't unemployed for three years trying to find any job. I mean at this point I'm going to go drive a cab or, you know, work at the gas station or something. I don't even- I don't know what to do anymore.")
 
             inf_input_audio = os.path.join(
                 self.hparams.progress_sample_path,
                 str(self.hparams.epoch_counter.current),
                 "inf_input_audio.wav",
             )
+            
             torchaudio.save(
                 inf_input_audio,
                 sb.dataio.dataio.read_audio(wavs[0]).unsqueeze(0),
+                # sb.dataio.dataio.read_audio("/home/elisam/projects/def-ravanelm/datasets/IEMOCAP/IEMOCAP_full_release/Session4/sentences/wav/Ses04F_impro04/Ses04F_impro04_F008.wav").unsqueeze(0),
                 self.hparams.sample_rate,
             )
 
@@ -530,8 +560,16 @@ def dataio_prepare(hparams):
             json_path=data_info[dataset],
             replacements={"data_root": hparams["data_folder"]},
             dynamic_items=[audio_pipeline],
-            output_keys=["mel_text_pair", "wav", "label", "uttid"],
+            output_keys=["mel_text_pair", "wav", "label", "uttid", "emo"], # THIS LINE
         )
+        # datasets[dataset] = sb.dataio.dataset.DynamicItemDataset.from_json(
+        #     json_path=data_info[dataset],
+        #     replacements={"data_root": hparams["data_folder"]},
+        #     dynamic_items=[audio_pipeline],
+        #     output_keys=["mel_text_pair", "wav", "label", "uttid"],
+        # )
+        print(f"THIS IS DATASET: {datasets[dataset]}")
+        print("Dataset Size:", len(datasets[dataset]))
 
     return datasets
 
@@ -556,7 +594,10 @@ if __name__ == "__main__":
     )
 
     print(f"TRAIN {hparams['train_json']}")
-    print("SKIP PREP IS TRUE")
+    if hparams["skip_prep"]:
+        print("SKIP PREP IS TRUE")
+    else:
+        print("RIPPPPPPPPPPPP")
 
     # Prepare data
     if not hparams["skip_prep"]:
@@ -618,7 +659,7 @@ if __name__ == "__main__":
         },
     )
 
-    datasets = dataio_prepare(hparams)
+    datasets = dataio_prepare(hparams) # MAYBE HAVE TO CHANGE THIS BECAUSE ADDING EMOTION
 
     # Brain class initialization
     tacotron2_brain = Tacotron2Brain(

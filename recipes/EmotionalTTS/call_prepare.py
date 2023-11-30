@@ -71,6 +71,7 @@ def dataio_prep(hparams):
         "valid": hparams["valid_annotation"],
         "test": hparams["test_annotation"],
     }
+    print(data_info)
     for dataset in data_info:
         datasets[dataset] = sb.dataio.dataset.DynamicItemDataset.from_json(
             json_path=data_info[dataset],
@@ -83,6 +84,7 @@ def dataio_prep(hparams):
     # mappinng.
 
     lab_enc_file = os.path.join(hparams["save_folder"], "label_encoder.txt")
+    print(len(datasets["train"]))
     label_encoder.load_or_create(
         path=lab_enc_file,
         from_didatasets=[datasets["train"]],
@@ -133,3 +135,42 @@ if __name__ == "__main__":
 
     # Create dataset objects "train", "valid", and "test".
     datasets = dataio_prep(hparams)
+    
+    from compute_speaker_embeddings import compute_speaker_embeddings
+
+    sb.utils.distributed.run_on_main(
+        compute_speaker_embeddings,
+        kwargs={
+            "input_filepaths": [
+                hparams["train_json"],
+                hparams["valid_json"],
+                hparams["test_json"],
+            ],
+            "output_file_paths": [
+                hparams["train_speaker_embeddings_pickle"],
+                hparams["valid_speaker_embeddings_pickle"],
+                hparams["test_speaker_embeddings_pickle"],
+            ],
+            "data_folder": hparams["data_folder"],
+            "spk_emb_encoder_path": hparams["spk_emb_encoder"],
+            "spk_emb_sr": hparams["spk_emb_sample_rate"],
+            "mel_spec_params": {
+                "custom_mel_spec_encoder": hparams["custom_mel_spec_encoder"],
+                "sample_rate": hparams["spk_emb_sample_rate"],
+                "hop_length": hparams["hop_length"],
+                "win_length": hparams["win_length"],
+                "n_mel_channels": hparams["n_mel_channels"],
+                "n_fft": hparams["n_fft"],
+                "mel_fmin": hparams["mel_fmin"],
+                "mel_fmax": hparams["mel_fmax"],
+                "mel_normalized": hparams["mel_normalized"],
+                "power": hparams["power"],
+                "norm": hparams["norm"],
+                "mel_scale": hparams["mel_scale"],
+                "dynamic_range_compression": hparams[
+                    "dynamic_range_compression"
+                ],
+            },
+            "device": run_opts["device"],
+        },
+    )

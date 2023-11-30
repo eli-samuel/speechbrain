@@ -1,0 +1,1 @@
+/home/elisam/projects/def-ravanelm/elisam/speechbrain/recipes/EmotionalTTS/results/tacotron2/1004/save/CKPT+2023-11-21+21-21-05+00/custom.py
