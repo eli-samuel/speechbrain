@@ -35,7 +35,7 @@ class Tacotron2Brain(sb.Brain):
         """Gets called at the beginning of ``fit()``, on multiple processes
         if ``distributed_count > 0`` and backend is ddp and initializes statistics"""
 
-        print("BBBBBBBBBBBBBB")
+        # print("BBBBBBBBBBBBBB")
         self.hparams.progress_sample_logger.reset()
         self.last_epoch = 0
         self.last_batch = None
@@ -51,7 +51,7 @@ class Tacotron2Brain(sb.Brain):
             )
 
         self.last_loss_stats = {}
-        print("DDDDDDDDDDDDDDD")
+        # print("DDDDDDDDDDDDDDD")
         return super().on_fit_start()
 
     def compute_forward(self, batch, stage):
@@ -68,15 +68,21 @@ class Tacotron2Brain(sb.Brain):
         -------
         the model output
         """
-        print("COMPUTING FORWARD PASS")
+        # print("COMPUTING FORWARD PASS")
         effective_batch = self.batch_to_device(batch)
         inputs, y, num_items, _, _, spk_embs, spk_ids, emo = effective_batch
 
-        print(f"EMOOOOOOOO: {emo}")
+        # print(f"EMOOOOOOOO: {emo}")
 
         _, input_lengths, _, _, _ = inputs
 
         max_input_length = input_lengths.max().item()
+        # print(len(inputs))
+        # print(inputs[0])
+        # print(input_lengths)
+
+        # for tensor in inputs:
+        #     print(tensor.shape)
 
         return self.modules.model(
             inputs, spk_embs, emo, alignments_dim=max_input_length # THIS LINE
@@ -95,7 +101,7 @@ class Tacotron2Brain(sb.Brain):
         loss: torch.Tensor
             detached loss
         """
-        print("FITTING BATCH")
+        # print("FITTING BATCH")
         result = super().fit_batch(batch)
         self.hparams.lr_annealing(self.optimizer)
         return result
@@ -117,7 +123,6 @@ class Tacotron2Brain(sb.Brain):
         loss : torch.Tensor
             A one-element tensor used for backpropagating the gradient
         """
-        print("COMPUTING EFFECTIVE BATCH")
         effective_batch = self.batch_to_device(batch)
         # Hold on to the batch for the inference sample.
         # This is needed because the infernece sample is run from on_stage_end only,
@@ -127,6 +132,7 @@ class Tacotron2Brain(sb.Brain):
         # Hold on to a sample (for logging)
         self._remember_sample(effective_batch, predictions)
         # Compute the loss
+        # print(f"THIS IS THE CURRENT STAGE FOR LOSSSSSS: {stage}")
         loss = self._compute_loss(predictions, effective_batch, stage)
         return loss
 
@@ -147,12 +153,9 @@ class Tacotron2Brain(sb.Brain):
         loss: torch.Tensor
             the loss value
         """
-        print("=========================================")
-        print(f"COMPUTING LOSS for stage {stage}")
-        print(f"COMPUTING LOSS for stage {stage}")
-        print(f"COMPUTING LOSS for stage {stage}")
-        print(f"COMPUTING LOSS for stage {stage}")
-        print("=========================================")
+        # print("=========================================")
+        # print(f"COMPUTING LOSS for stage {stage}")
+        # print("=========================================")
 
         inputs, targets, num_items, labels, wavs, spk_embs, spk_ids, emo = batch # THIS LINE
         text_padded, input_lengths, _, max_len, output_lengths = inputs
@@ -169,7 +172,8 @@ class Tacotron2Brain(sb.Brain):
             self.last_epoch,
         )
         self.last_loss_stats[stage] = scalarize(loss_stats)
-        print(f"THIS IS THE LOSS STATS: {self.last_loss_stats}")
+
+        # print(f"THIS IS THE LOSS STATS: {self.last_loss_stats}")
         return loss_stats.loss
 
     def _remember_sample(self, batch, predictions):
@@ -182,7 +186,7 @@ class Tacotron2Brain(sb.Brain):
         predictions: tuple
             predictions (raw output of the Tacotron model)
         """
-        print("remembering sample")
+        # print("remembering sample")
         inputs, targets, num_items, labels, wavs, spk_embs, spk_ids, emo = batch # THIS LINE
         text_padded, input_lengths, _, max_len, output_lengths = inputs
         mel_target, _ = targets
@@ -239,7 +243,7 @@ class Tacotron2Brain(sb.Brain):
         batch: tuple
             the batch on the correct device
         """
-        print("batching to device")
+        # print("batching to device")
         (
             text_padded,
             input_lengths,
@@ -266,7 +270,7 @@ class Tacotron2Brain(sb.Brain):
         y = (mel_padded, gate_padded)
         len_x = torch.sum(output_lengths)
         spk_embs = spk_embs.to(self.device, non_blocking=True).float()
-        print(emo)
+        # print(emo)
 
         return (x, y, len_x, labels, wavs, spk_embs, spk_ids, emo)
 
@@ -300,7 +304,7 @@ class Tacotron2Brain(sb.Brain):
             The currently-starting epoch. This is passed
             `None` during the test stage.
         """
-        print(f"THIS IS THE CURRENT STAGE: {stage}")
+        # print(f"THIS IS THE CURRENT STAGE: {stage}")
 
         # Logs training samples every 10 epochs
         if stage == sb.Stage.TRAIN and (
@@ -378,7 +382,7 @@ class Tacotron2Brain(sb.Brain):
 
         # At the end of validation, we can write
         if stage == sb.Stage.VALID:
-            print(f"LAST LOSS STATS FOR VALID: {self.last_loss_stats}")
+            # print(f"LAST LOSS STATS FOR VALID: {self.last_loss_stats}")
             # Update learning rate
             lr = self.optimizer.param_groups[-1]["lr"]
             self.last_epoch = epoch
@@ -387,7 +391,7 @@ class Tacotron2Brain(sb.Brain):
             self.hparams.train_logger.log_stats(  # 1#2#
                 stats_meta={"Epoch": epoch, "lr": lr},
                 train_stats=self.last_loss_stats[sb.Stage.TRAIN],
-                valid_stats=self.last_loss_stats[sb.Stage.VALID],
+                # valid_stats=self.last_loss_stats[sb.Stage.VALID],
             )
 
             # The tensorboard_logger writes a summary to stdout and to the logfile.
@@ -395,13 +399,13 @@ class Tacotron2Brain(sb.Brain):
                 self.tensorboard_logger.log_stats(
                     stats_meta={"Epoch": epoch, "lr": lr},
                     train_stats=self.last_loss_stats[sb.Stage.TRAIN],
-                    valid_stats=self.last_loss_stats[sb.Stage.VALID],
+                    # valid_stats=self.last_loss_stats[sb.Stage.VALID],
                 )
 
             # Save the current checkpoint and delete previous checkpoints.
             epoch_metadata = {
                 **{"epoch": epoch},
-                **self.last_loss_stats[sb.Stage.VALID],
+                # **self.last_loss_stats[sb.Stage.VALID],
             }
             self.checkpointer.save_and_keep_only(
                 meta=epoch_metadata,
@@ -445,11 +449,11 @@ class Tacotron2Brain(sb.Brain):
 
         if self.last_batch is None:
             return
-        inputs, targets, _, labels, wavs, spk_embs, spk_ids = self.last_batch
+        inputs, targets, _, labels, wavs, spk_embs, spk_ids, emo = self.last_batch
         text_padded, input_lengths, _, _, _ = inputs
 
         mel_out, _, _ = self.hparams.model.infer(
-            text_padded[:1], spk_embs[:1], input_lengths[:1]
+            text_padded[:1], spk_embs[:1], input_lengths[:1], emo[:1]
         )
         self.hparams.progress_sample_logger.remember(
             inference_mel_out=self._get_spectrogram_sample(mel_out)
@@ -472,7 +476,6 @@ class Tacotron2Brain(sb.Brain):
 
             with open(inf_sample_text, "w") as f:
                 f.write(labels[0])
-                # f.write("Yeah but you weren't unemployed for three years trying to find any job. I mean at this point I'm going to go drive a cab or, you know, work at the gas station or something. I don't even- I don't know what to do anymore.")
 
             inf_input_audio = os.path.join(
                 self.hparams.progress_sample_path,
@@ -483,7 +486,6 @@ class Tacotron2Brain(sb.Brain):
             torchaudio.save(
                 inf_input_audio,
                 sb.dataio.dataio.read_audio(wavs[0]).unsqueeze(0),
-                # sb.dataio.dataio.read_audio("/home/elisam/projects/def-ravanelm/datasets/IEMOCAP/IEMOCAP_full_release/Session4/sentences/wav/Ses04F_impro04/Ses04F_impro04_F008.wav").unsqueeze(0),
                 self.hparams.sample_rate,
             )
 
@@ -562,14 +564,6 @@ def dataio_prepare(hparams):
             dynamic_items=[audio_pipeline],
             output_keys=["mel_text_pair", "wav", "label", "uttid", "emo"], # THIS LINE
         )
-        # datasets[dataset] = sb.dataio.dataset.DynamicItemDataset.from_json(
-        #     json_path=data_info[dataset],
-        #     replacements={"data_root": hparams["data_folder"]},
-        #     dynamic_items=[audio_pipeline],
-        #     output_keys=["mel_text_pair", "wav", "label", "uttid"],
-        # )
-        print(f"THIS IS DATASET: {datasets[dataset]}")
-        print("Dataset Size:", len(datasets[dataset]))
 
     return datasets
 
@@ -601,6 +595,7 @@ if __name__ == "__main__":
 
     # Prepare data
     if not hparams["skip_prep"]:
+        print("DOING THE IEMOCAP PREPARE STUFF")
         sys.path.append("../../")
         from iemocap_prepare import prepare_iemocap
 
@@ -683,7 +678,7 @@ if __name__ == "__main__":
         tacotron2_brain.tensorboard_logger = sb.utils.train_logger.TensorboardLogger(
             save_dir=hparams["output_folder"] + "/tensorboard"
         )
-
+        
     # Training
     tacotron2_brain.fit(
         tacotron2_brain.hparams.epoch_counter,

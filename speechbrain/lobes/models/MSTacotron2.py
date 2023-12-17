@@ -53,7 +53,7 @@ from speechbrain.lobes.models.Tacotron2 import (
     Decoder,
     get_mask_from_lengths,
 )
-
+from speechbrain.lobes.models.ReplayBuffer import ReplayBuffer
 
 class Tacotron2(nn.Module):
     """The Tactron2 text-to-speech model, based on the NVIDIA implementation.
@@ -237,6 +237,8 @@ class Tacotron2(nn.Module):
             postnet_n_convolutions,
         )
 
+        # self.replay_buffer = ReplayBuffer(capacity=256, representation_size=703) # added the replay buffer
+
         # Additions for Zero-Shot Multi-Speaker TTS
         # FiLM (Feature-wise Linear Modulation) layers for injecting the speaker embeddings into the TTS pipeline
         self.ms_film_hidden_size = int(
@@ -321,24 +323,11 @@ class Tacotron2(nn.Module):
         output_legnths: torch.Tensor
             length of the output without padding
         """
-        print("IN MSTACOTRON2 FORWARD")
         inputs, input_lengths, targets, max_len, output_lengths = inputs
         input_lengths, output_lengths = input_lengths.data, output_lengths.data
 
         emo_indices = torch.tensor([{'hap': 0, 'sad': 1, 'ang': 2, 'neu': 3}[e] for e in emo]).to(inputs.device)
         emo_embeddings = self.emo_embedding(emo_indices)
-        # print(emo_embeddings.shape)
-        # print(inputs.shape)
-        # print(input_lengths)
-        # print(targets.shape)
-        # print(max_len)
-        # print(output_lengths)
-        # exit()
-
-        # print(f"EMO {emo}")
-        # print(f"INDICES {emo_indices}")
-        # print(f"EMBEDDINGS {emo_embeddings}")
-        # exit()
 
         embedded_inputs = self.embedding(inputs).transpose(1, 2)
         encoder_outputs = self.encoder(embedded_inputs, input_lengths)
@@ -373,6 +362,14 @@ class Tacotron2(nn.Module):
 
         mel_outputs_postnet = self.postnet(mel_outputs)
         mel_outputs_postnet = mel_outputs + mel_outputs_postnet
+
+        # print(mel_outputs_postnet.shape)
+        # self.replay_buffer.add_representation(mel_outputs_postnet)
+        # rep, mse = self.replay_buffer.get_closest_representation(mel_outputs_postnet)
+        # if rep is not None:
+        #     print(f"The closest representation has a MSE loss of: {mse}")
+        # else:
+        #     print("Rep was none for some reason?")
 
         return self.parse_output(
             [mel_outputs, mel_outputs_postnet, gate_outputs, alignments],
@@ -510,7 +507,7 @@ class Loss(nn.Module):
         guided_attention_hard_stop=None,
     ):
         super().__init__()
-        print("MSTACOTRON2 INIT")
+        # print("MSTACOTRON2 INIT")
         if guided_attention_weight == 0:
             guided_attention_weight = None
         self.guided_attention_weight = guided_attention_weight
@@ -564,7 +561,7 @@ class Loss(nn.Module):
         result: LossStats
             the total loss - and individual losses (mel and gate)
         """
-        print("loss forward pass")
+        # print("loss forward pass")
         mel_target, gate_target = targets[0], targets[1]
         mel_target.requires_grad = False
         gate_target.requires_grad = False
@@ -648,7 +645,7 @@ class Loss(nn.Module):
         attn_loss: torch.Tensor
             the attention loss value
         """
-        print("got attention loss")
+        # print("got attention loss")
         zero_tensor = torch.tensor(0.0, device=alignments.device)
         if (
             self.guided_attention_weight is None
@@ -704,7 +701,7 @@ class TextMelCollate:
     ):
         self.n_frames_per_step = n_frames_per_step
         self.speaker_embeddings_pickle = speaker_embeddings_pickle
-        print("MSTACOTRON2 TextMelCollate INIT HERE")
+        # print("MSTACOTRON2 TextMelCollate INIT HERE")
 
     # TODO: Make this more intuitive, use the pipeline
     def __call__(self, batch):
@@ -714,7 +711,7 @@ class TextMelCollate:
         batch: list
             [text_normalized, mel_normalized]
         """
-        print("TextMelCollate CALL HERE")
+        # print("TextMelCollate CALL HERE")
         # TODO: Remove for loops and this dirty hack
         raw_batch = list(batch)
         for i in range(
@@ -723,7 +720,7 @@ class TextMelCollate:
             batch[i] = batch[i]["mel_text_pair"]
             # print(f"THIS IS BATCH: {batch[i]}")
 
-        print("BATCH HAS BEEN PRINTED (not anymore but would've)")
+        # print("BATCH HAS BEEN PRINTED (not anymore but would've)")
 
         # Right zero-pad all one-hot text sequences to max input length
 
@@ -775,7 +772,7 @@ class TextMelCollate:
 
             spk_ids.append(raw_batch[idx]["uttid"].split("_")[0])
             
-        print(emo)
+        # print(emo)
 
         spk_embs = torch.stack(spk_embs_list)
 
